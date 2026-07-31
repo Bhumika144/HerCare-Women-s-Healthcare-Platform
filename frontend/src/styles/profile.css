@@ -1,0 +1,134 @@
+.profile-wrapper {
+  min-height: 100vh; /* 🔥 center vertically */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+/* HEADER */
+.profile-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.image-box {
+  position: relative;
+  width: 140px;   /* 🔥 bigger */
+  height: 140px;
+  margin: auto;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.image-box input {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* CARD */
+.card {
+  width: 100%;
+  max-width: 700px; /* 🔥 bigger cards */
+  background: #ffffff;
+  padding: 28px; /* 🔥 more space */
+  border-radius: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* TITLE */
+.card h3 {
+  margin-bottom: 18px;
+  color: #5a2a27;
+  font-size: 20px;  /* 🔥 bigger */
+  font-weight: 600;
+}
+
+/* INPUTS */
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: #ff8fab;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 143, 171, 0.2);
+}
+
+/* CHIPS */
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.chip {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: #f1f1f1;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.chip:hover {
+  background: #ffd6de;
+}
+
+.chip.active {
+  background: #ff8fab;
+  color: white;
+}
+
+/* BUTTONS */
+.edit-btn, .save-btn {
+  width: 100%;
+  max-width: 700px;
+  padding: 14px;
+  border: none;
+  background: linear-gradient(135deg, #ff8fab, #ff6f91);
+  color: white;
+  border-radius: 14px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+}
+
+.edit-btn:hover, .save-btn:hover {
+  transform: scale(1.03);
+}
+
+/* OPTIONAL TEXT */
+.sub-text {
+  color: #777;
+  font-size: 14px;
+  margin-top: 5px;
+}

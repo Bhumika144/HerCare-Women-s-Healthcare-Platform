@@ -1,0 +1,137 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+}
+
+/* Layout */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #FFFDF1;
+}
+
+/* Sidebar (same as yours) */
+.sidebar {
+  width: 280px;
+  background: #e5b7a2;
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+  border-top-right-radius: 28px;
+  border-bottom-right-radius: 28px;
+}
+
+/* Main Chat Area */
+.chat-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 25px 40px;
+  background: #FFFDF1;
+}
+
+/* Header */
+.chat-header {
+  font-size: 26px;
+  font-weight: 800;
+  color: #562F00;
+  margin-bottom: 10px;
+}
+
+.chat-sub {
+  color: #562F00;
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+/* Chat Box */
+.chat-box {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Messages */
+.message {
+  max-width: 65%;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.4;
+  animation: fadeIn 0.3s ease;
+}
+
+/* User */
+.user {
+  background: #562F00;
+  color: #FFFDF1;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+/* Bot */
+.bot {
+  background: #FFE5D0;
+  color: #562F00;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+/* Typing animation */
+.typing {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Input Area */
+.input-area {
+  display: flex;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
+}
+
+.input-area button {
+  padding: 14px 20px;
+  border: none;
+  border-radius: 14px;
+  background: #562F00;
+  color: #FFFDF1;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.input-area button:hover {
+  background: #7a4505;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,247 @@
+/* 🌸 Container */
+.tracker-container {
+  padding: 30px;
+  min-height: 100vh;
+  background: #FFFDF1;
+  font-family: "Inter", sans-serif;
+  max-width: 1100px; /* 🔥 wider for grid */
+  margin: auto;
+}
+
+.tracker-container h2 {
+  font-size: 28px;
+  color: #562F00;
+  margin-bottom: 20px;
+}
+
+/* 💎 Premium top card */
+.premium-card {
+  background: linear-gradient(135deg, #ff758f, #ffb3c1);
+  padding: 25px;
+  border-radius: 20px;
+  color: white;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* 🧠 Phase badge */
+.phase-badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: white;
+  color: #ff4d6d;
+  font-weight: bold;
+}
+
+/* 🔥 GRID LAYOUT */
+.tracker-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  align-items: start;
+}
+
+/* 📅 Calendar section */
+.calendar-section {
+  background: white;
+  padding: 20px;
+  border-radius: 25px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* Calendar */
+.react-calendar {
+  width: 100%;
+  border: none;
+  font-size: 18px;
+}
+
+/* Calendar tiles */
+.react-calendar__tile {
+  height: 60px !important;
+  border-radius: 12px;
+}
+
+/* Logged */
+.period-day {
+  background: #4da6ff !important;
+  color: white !important;
+  border-radius: 50% !important;
+}
+
+/* Predicted */
+.predicted-day {
+  background: #ffccd9 !important;
+}
+
+.predicted-start {
+  background: linear-gradient(90deg, #ffb6c1, #ff92a6) !important;
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
+}
+
+.predicted-end {
+  background: linear-gradient(90deg, #ffb6c1, #ff92a6) !important;
+  border-top-right-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
+}
+
+/* 💖 Symptom card */
+.symptom-card {
+  padding: 22px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.section-title {
+  margin-top: 15px;
+  font-weight: 600;
+  color: #5a2a2a;
+}
+
+/* Pills */
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.pill {
+  margin: 6px;
+  padding: 10px 16px;
+  border-radius: 25px;
+  border: none;
+  background: #f5e6e8;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.pill:hover {
+  transform: scale(1.05);
+}
+
+.pill.active {
+  background: linear-gradient(135deg, #ff758f, #ffb3c1);
+  color: white;
+  box-shadow: 0 6px 14px rgba(255, 117, 143, 0.4);
+}
+
+/* AI button */
+.ai-btn {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #ff758f, #ffb3c1);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* AI Cards */
+.ai-cards {
+  margin-top: 15px;
+}
+
+.ai-card {
+  background: #fff3f6;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  border-left: 5px solid #ff758f;
+}
+
+/* 📱 RESPONSIVE (VERY IMPORTANT) */
+@media (max-width: 768px) {
+  .tracker-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* 🔥 FIX GREY DATES */
+.react-calendar__month-view__days__day {
+  color: #2c0b1a !important; /* dark readable */
+  font-weight: 500;
+}
+
+/* ❌ Remove faded look of neighbor month days */
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #bda3a8 !important; /* light but still visible */
+  opacity: 0.6;
+}
+
+/* 💗 Weekend highlight */
+.react-calendar__month-view__days__day--weekend {
+  color: #ff6f91 !important;
+  font-weight: 600;
+}
+
+/* 📅 TODAY highlight */
+.react-calendar__tile--now {
+  background: #ffe3ea !important;
+  border: 2px solid #ff758f;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+/* ✨ Hover effect */
+.react-calendar__tile:hover {
+  background: #ffe3ea !important;
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* 💎 HEADER DESIGN */
+.react-calendar__navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+/* Month-Year Title */
+.react-calendar__navigation__label {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  color: #2c0b1a !important;
+}
+
+/* Arrow buttons */
+.react-calendar__navigation__arrow {
+  font-size: 20px;
+  color: #ff4d6d;
+  background: #fff0f5;
+  border-radius: 10px;
+  padding: 6px 10px;
+  transition: 0.2s;
+}
+
+/* Hover arrows */
+.react-calendar__navigation__arrow:hover {
+  background: #ff758f;
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Remove default button background */
+.react-calendar__navigation button {
+  background: none;
+  border: none;
+}
+
+/* 🔲 Weekday labels (Mon Tue etc.) */
+.react-calendar__month-view__weekdays {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  color: #a05a6c;
+}
+
+/* Remove underline */
+.react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+}
