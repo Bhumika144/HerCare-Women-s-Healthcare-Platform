@@ -1,3 +1,5 @@
+from http import client
+
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from flask_cors import CORS
@@ -23,30 +25,42 @@ import requests
 
 load_dotenv()
 
-
 app = Flask(__name__)
 CORS(app)
 
-
-
+mongo_uri = os.getenv("MONGO_URI")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 
-app.config["MONGO_URI"] = os.getenv("MONGO_URI")
+
+app.config["MONGO_URI"] = mongo_uri
+
 mongo = PyMongo(app)
 
-print("MONGO DB:", mongo.db)
+try:
+    mongo.db.command("ping")
+    print("✅ MongoDB Connected")
+    print("Database:", mongo.db.name)
+except Exception as e:
+    print("❌ MongoDB Error:", e)
 
 # -------------------- HELPERS --------------------
 
 
 def check_period_reminders():
-    users = mongo.db.user_profiles.find()
+    try:
+        users = mongo.db.user_profiles.find()
+    except Exception as e:
+        print("❌ Cannot access MongoDB:", e)
+        return
+
     today = datetime.datetime.utcnow().date()
+    today_string = today.strftime("%Y-%m-%d")
 
     print("📅 TODAY:", today)
 
     for user in users:
+
         email = user.get("email")
         predicted_start = user.get("predicted_period_start")
         last_reminder_sent = user.get("last_reminder_sent")
@@ -56,8 +70,9 @@ def check_period_reminders():
         print("PREDICTED:", predicted_start)
         print("LAST REMINDER:", last_reminder_sent)
 
-        # Skip if required data is missing
+        # Skip incomplete profiles
         if not email or not predicted_start:
+            print("⏭️ Missing email or predicted date")
             continue
 
         # Convert predicted date
@@ -70,32 +85,32 @@ def check_period_reminders():
             print("❌ INVALID PREDICTED DATE:", e)
             continue
 
-        # Calculate difference
+        # Calculate days until period
         diff = (predicted_date - today).days
 
-        print("DIFF:", diff)
+        print("📊 DAYS DIFFERENCE:", diff)
 
-        # =====================================================
-        # 🛑 PREVENT MULTIPLE EMAILS ON THE SAME DAY
-        # =====================================================
-
-        today_string = today.strftime("%Y-%m-%d")
+        # ==================================================
+        # 🛑 PREVENT DUPLICATE EMAIL ON SAME DAY
+        # ==================================================
 
         if last_reminder_sent == today_string:
-            print("⏭️ Reminder already sent today. Skipping...")
+            print("⏭️ Reminder already sent today")
             continue
 
-        # =====================================================
-        # 📧 PREPARE REMINDER
-        # =====================================================
+        # ==================================================
+        # 📧 CREATE REMINDER
+        # ==================================================
 
         subject = None
         message = None
 
-        # -----------------------------------------------------
-        # 🩷 2 DAYS BEFORE
-        # -----------------------------------------------------
+        # -----------------------------------------------
+        # 🩷 2 DAYS LEFT
+        # -----------------------------------------------
+
         if diff == 2:
+
             subject = "🌸 Period Reminder - 2 Days Left"
 
             message = (
@@ -103,10 +118,12 @@ def check_period_reminders():
                 "Please take care of yourself and stay prepared. 💖"
             )
 
-        # -----------------------------------------------------
-        # 🩷 1 DAY BEFORE
-        # -----------------------------------------------------
+        # -----------------------------------------------
+        # 🩷 1 DAY LEFT
+        # -----------------------------------------------
+
         elif diff == 1:
+
             subject = "🌸 Period Reminder - Tomorrow"
 
             message = (
@@ -114,10 +131,12 @@ def check_period_reminders():
                 "Please stay prepared and take care of yourself. 💖"
             )
 
-        # -----------------------------------------------------
-        # 🔴 PERIOD EXPECTED TODAY
-        # -----------------------------------------------------
+        # -----------------------------------------------
+        # 🔴 TODAY
+        # -----------------------------------------------
+
         elif diff == 0:
+
             subject = "🌸 Period Expected Today"
 
             message = (
@@ -126,10 +145,12 @@ def check_period_reminders():
                 "once it starts. 💖"
             )
 
-        # -----------------------------------------------------
-        # ⚠️ PERIOD IS LATE
-        # -----------------------------------------------------
+        # -----------------------------------------------
+        # ⚠️ PERIOD LATE
+        # -----------------------------------------------
+
         elif diff < 0:
+
             days_late = abs(diff)
 
             subject = (
@@ -145,35 +166,37 @@ def check_period_reminders():
                 "to receive a daily reminder until you log it."
             )
 
-        # -----------------------------------------------------
-        # 🟡 MORE THAN 2 DAYS BEFORE
-        # -----------------------------------------------------
+        # -----------------------------------------------
+        # 🟡 MORE THAN 2 DAYS AWAY
+        # -----------------------------------------------
+
         else:
-            # Do not send reminder yet
+
             print(
-                f"⏳ Period is {diff} days away. "
-                "No reminder needed today."
+                f"⏳ Period is {diff} days away."
             )
+
             continue
 
-        # =====================================================
+        # ==================================================
         # 📧 SEND EMAIL
-        # =====================================================
+        # ==================================================
 
         try:
+
             print("🔥 SENDING PERIOD REMINDER")
             print("📧 TO:", email)
             print("📧 SUBJECT:", subject)
 
-            send_period_email(
+            send_email_async(
                 email,
                 subject,
                 message
             )
 
-            # =================================================
-            # ✅ SAVE TODAY'S REMINDER DATE
-            # =================================================
+            # ==================================================
+            # ✅ SAVE LAST REMINDER DATE
+            # ==================================================
 
             mongo.db.user_profiles.update_one(
                 {"_id": user["_id"]},
@@ -185,23 +208,17 @@ def check_period_reminders():
             )
 
             print(
-                "✅ Reminder sent and date saved:",
+                "✅ Reminder recorded:",
                 today_string
             )
 
         except Exception as e:
+
             print(
                 "❌ PERIOD REMINDER ERROR:",
                 str(e)
             )
 
-
-def run_scheduler():
-    while True:
-        check_period_reminders()
-        time.sleep(43200)  # 12 hours
-
-threading.Thread(target=run_scheduler, daemon=True).start()
 
 
 
@@ -212,15 +229,35 @@ def send_email_async(to_email, subject, message=None):
         try:
             if message is None:
                 print("🔐 Sending OTP email...")
-                send_otp_email(to_email, subject)   # subject = OTP
+                send_otp_email(to_email, subject)
             else:
                 print("🌸 Sending PERIOD email...")
-                send_period_email(to_email, subject, message)
+                send_period_email(
+                    to_email,
+                    subject,
+                    message
+                )
 
         except Exception as e:
             print("❌ EMAIL ERROR:", str(e))
 
-    threading.Thread(target=task).start()
+    threading.Thread(target=task, daemon=True).start()
+
+
+def run_scheduler():
+    while True:
+        try:
+            check_period_reminders()
+        except Exception as e:
+            print("❌ SCHEDULER ERROR:", e)
+
+        time.sleep(43200)  # 12 hours
+
+
+threading.Thread(
+    target=run_scheduler,
+    daemon=True
+).start()
 
 
 
@@ -243,6 +280,7 @@ def get_image(filename):
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
+
     if not data:
         return jsonify({"error": "Missing JSON body"}), 400
 
@@ -256,32 +294,40 @@ def signup():
     if mongo.db.users.find_one({"email": email}):
         return jsonify({"message": "User already exists"}), 400
 
-    hashed_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+    hashed_pw = bcrypt.hashpw(
+        password.encode(),
+        bcrypt.gensalt()
+    )
+
     otp = str(random.randint(100000, 999999))
 
-    # ✅ STORE OTP
+    # Store OTP
     mongo.db.otps.insert_one({
         "email": email,
         "otp": otp,
-        "expires_at": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=5)
+        "expires_at": (
+            datetime.datetime.now(datetime.timezone.utc)
+            + datetime.timedelta(minutes=5)
+        )
     })
 
-    # ✅ SEND OTP EMAIL
+    # Send OTP
     send_email_async(email, otp)
 
-    # ✅ CREATE USER WITH ONBOARDING = FALSE
+    # Create user
     mongo.db.users.insert_one({
         "name": name,
         "email": email,
         "password": hashed_pw,
         "is_verified": False,
-        "onboarding_completed": False   # 🔥 IMPORTANT
+        "onboarding_completed": False
     })
 
     return jsonify({
         "message": "OTP sent to email",
-        "redirect": "onboarding"   # 🔥 FRONTEND WILL USE THIS
+        "redirect": "onboarding"
     }), 200
+
 
 
 @app.route("/verify-otp", methods=["POST"])
