@@ -23,12 +23,15 @@ import threading
 import requests
 
 
+
+
+
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
-# to verify my commite on github
+# to verify my commite on github recheck
 
 mongo_uri = os.getenv("MONGO_URI")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
