@@ -13,6 +13,8 @@ import {
 } from 'react-icons/fa';
 import { GiFlowerStar, GiFemale, GiHealthNormal } from 'react-icons/gi';
 import '../styles/Landing.css';
+import yogaImage from "../assets/images/yoga.png";
+import landingImage from "../assets/images/Landing.png";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -94,10 +96,7 @@ const Landing = () => {
       {/* Hero Section - Left aligned content */}
       <section id="home" className="hero">
         <div className="hero-background">
-          <img 
-            src="/src/assets/images/Landing.png" 
-            alt="Young woman sitting comfortably at home using smartphone" 
-          />
+          <img src={landingImage} alt="Young woman sitting comfortably at home using smartphone" />
           <div className="hero-overlay"></div>
         </div>
         <div className="hero-container">
@@ -229,7 +228,7 @@ const Landing = () => {
       {/* Yoga Image Break Section */}
       <section id="wellness" className="image-break-section">
         <img 
-          src="/src/assets/images/yoga.png" 
+          src={yogaImage} 
           alt="Young woman stretching and exercising in a bright studio" 
           className="break-image"
         />
