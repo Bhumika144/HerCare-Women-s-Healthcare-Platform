@@ -28,6 +28,8 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
+# to verify my commite on github
+
 mongo_uri = os.getenv("MONGO_URI")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
