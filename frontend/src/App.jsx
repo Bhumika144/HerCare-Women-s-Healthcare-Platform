@@ -17,54 +17,131 @@ import SupportBot from "./pages/SupportBot";
 import Education from "./pages/Education";
 import Settings from "./pages/Settings";
 
-
 import PeriodExercise from "./pages/PeriodExercise";
 import Yoga from "./pages/Yoga";
 import Meditation from "./pages/Meditation";
 import Exercise from "./pages/Exercise";
+import Articles from "./pages/Articles";
 
-/* 🔥 ADD THIS */
+/* Profile */
 import Profile from "./pages/Profile";
 
 function App() {
   return (
     <Routes>
-      {/* Public */}
+
+      {/* =========================
+          PUBLIC ROUTES
+      ========================== */}
+
       <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/verify-otp" element={<VerifyOtp />} />
       <Route path="/login" element={<Login />} />
       <Route path="/onboarding" element={<Onboarding />} />
 
-      {/* Dashboard */}
+
+      {/* =========================
+          DASHBOARD
+      ========================== */}
+
       <Route path="/dashboard" element={<Dashboard />}>
 
-        {/* 🔥 ADD INDEX ROUTE (fix blank dashboard issue) */}
+        {/* Dashboard Home */}
         <Route index element={null} />
 
+        {/* Period Tracker */}
+        <Route
+          path="period-tracker"
+          element={<PeriodTracker />}
+        />
 
+        {/* Diet & Care */}
+        <Route
+          path="diet-care"
+          element={<DietCare />}
+        />
 
-        <Route path="period-tracker" element={<PeriodTracker />} />
-        <Route path="diet-care" element={<DietCare />} />
-          <Route path="mindfulness" element={<Mindfulness />} />
-          <Route path="mindfulness/period-exercise" element={<PeriodExercise />} />
-          <Route path="mindfulness/yoga" element={<Yoga />} />
-          <Route path="mindfulness/meditation" element={<Meditation />} />
-          <Route path="mindfulness/exercise" element={<Exercise />} />
-        
+        {/* Mindfulness */}
+        <Route
+          path="mindfulness"
+          element={<Mindfulness />}
+        />
 
-        <Route path="community" element={<Community />} />
-        <Route path="resources" element={<Resources />} />
-        <Route path="support-bot" element={<SupportBot />} />
-        <Route path="education" element={<Education />} />
-        <Route path="settings" element={<Settings />} />
+        <Route
+          path="mindfulness/period-exercise"
+          element={<PeriodExercise />}
+        />
 
-        {/* ✅🔥 PROFILE ROUTE (MAIN FIX) */}
-        <Route path="profile" element={<Profile />} />
+        <Route
+          path="mindfulness/yoga"
+          element={<Yoga />}
+        />
+
+        <Route
+          path="mindfulness/meditation"
+          element={<Meditation />}
+        />
+
+        <Route
+          path="mindfulness/exercise"
+          element={<Exercise />}
+        />
+
+        {/* Community */}
+        <Route
+          path="community"
+          element={<Community />}
+        />
+
+        {/* Resources */}
+        <Route
+          path="resources"
+          element={<Resources />}
+        />
+
+        {/* Support Bot */}
+        <Route
+          path="support-bot"
+          element={<SupportBot />}
+        />
+
+        {/* Education */}
+        <Route
+          path="education"
+          element={<Education />}
+        />
+
+        {/* Settings */}
+        <Route
+          path="settings"
+          element={<Settings />}
+        />
+
+        {/* Profile */}
+        <Route
+          path="profile"
+          element={<Profile />}
+        />
+
+        {/* Articles */}
+        <Route
+          path="articles"
+          element={<Articles />}
+        />
 
       </Route>
 
-      <Route path="*" element={<Navigate to="/" />} />
+
+      {/* =========================
+          FALLBACK
+      ========================== */}
+
+      <Route
+        path="*"
+        element={<Navigate to="/" />}
+      />
+
     </Routes>
   );
 }

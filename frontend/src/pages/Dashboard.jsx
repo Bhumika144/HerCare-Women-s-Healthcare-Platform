@@ -1,3 +1,4 @@
+// src/pages/Dashboard.jsx
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -5,21 +6,25 @@ import {
   FaTachometerAlt,
   FaCalendarAlt,
   FaLeaf,
-  FaBrain,
   FaUsers,
   FaBook,
   FaRobot,
   FaCog,
   FaSignOutAlt,
-  FaHeart,
-  FaChartLine,
   FaQuoteLeft,
   FaBell,
   FaUserCircle,
   FaFileDownload,
+  FaHeart,
+  FaChartLine,
+  FaWater,
+  FaMoon,
+  FaSun,
+  FaUtensils,
+  FaDumbbell,
 } from "react-icons/fa";
 import { GiFlowerStar } from "react-icons/gi";
-import { getDashboardData } from "../api"; // ✅ Fixed import path
+import { getDashboardData } from "../api";
 import "../styles/Dashboard.css";
 
 export default function Dashboard() {
@@ -34,13 +39,11 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Cycle Data - populated from API
   const [cycleData, setCycleData] = useState({
     currentDay: 0,
     cycleLength: 0,
     phase: "No Data",
     nextPeriod: "Not available",
-    ovulationDay: 0,
     daysUntilPeriod: null,
     lastPeriodDate: null,
     predictedPeriodDate: null,
@@ -48,6 +51,14 @@ export default function Dashboard() {
     healthScore: 0,
     moodTrend: "No data",
     nextPeriodDate: null,
+  });
+
+  // Today's health metrics
+  const [healthMetrics, setHealthMetrics] = useState({
+    water: 0,
+    sleep: 0,
+    steps: 0,
+    calories: 0,
   });
 
   useEffect(() => {
@@ -60,11 +71,8 @@ export default function Dashboard() {
 
     const parsedUser = JSON.parse(storedUser);
     setUser(parsedUser);
-
-    // Fetch real dashboard data
     fetchDashboardData(parsedUser.email);
 
-    // Greeting
     const hour = new Date().getHours();
     if (hour < 12) {
       setGreeting("Good Morning");
@@ -74,7 +82,6 @@ export default function Dashboard() {
       setGreeting("Good Evening");
     }
 
-    // Time update
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);
@@ -88,13 +95,11 @@ export default function Dashboard() {
       const data = await getDashboardData(email);
       setDashboardData(data);
       
-      // Update cycle data with real values from backend
       if (data && data.period_data) {
         const periodData = data.period_data;
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         
-        // Calculate days until next period
         let daysUntil = null;
         if (periodData.predicted_period_date) {
           const predictedDate = new Date(periodData.predicted_period_date);
@@ -103,7 +108,6 @@ export default function Dashboard() {
           daysUntil = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         }
 
-        // Determine phase based on current day
         let phase = "Not Tracked";
         const day = periodData.current_day || 0;
         const cycleLength = periodData.cycle_length || 28;
@@ -144,7 +148,6 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
       setError("Could not load period data. Please complete your period setup.");
-      // Set default values when data is not available
       setCycleData({
         currentDay: 0,
         cycleLength: 0,
@@ -163,7 +166,6 @@ export default function Dashboard() {
     }
   };
 
-  // Download Report
   const downloadReport = () => {
     const reportContent = `
 HERCARE WELLNESS REPORT
@@ -197,81 +199,24 @@ Generated on: ${new Date().toLocaleString()}
     navigate("/login");
   };
 
-  // Animations
   const sidebarVariants = {
     hidden: { x: -280, opacity: 0 },
     visible: {
       x: 0,
       opacity: 1,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
-
-  const mainContentVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, delay: 0.2 },
-    },
-  };
-
-  const notificationVariants = {
-    hidden: { opacity: 0, y: -50, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: "spring",
-        damping: 20,
-      },
-    },
-    exit: {
-      opacity: 0,
-      y: -50,
-      scale: 0.8,
-      transition: { duration: 0.2 },
+      transition: { duration: 0.4, ease: "easeOut" },
     },
   };
 
   const navItems = [
-    {
-      path: "/dashboard",
-      icon: FaTachometerAlt,
-      label: "Dashboard",
-      end: true,
-    },
-    {
-      path: "/dashboard/period-tracker",
-      icon: FaCalendarAlt,
-      label: "Period Tracker",
-    },
-    {
-      path: "/dashboard/mindfulness",
-      icon: FaLeaf,
-      label: "Mindfulness",
-    },
-    {
-      path: "/dashboard/community",
-      icon: FaUsers,
-      label: "Community",
-    },
-    {
-      path: "/dashboard/resources",
-      icon: FaBook,
-      label: "Resources",
-    },
-    {
-      path: "/dashboard/support-bot",
-      icon: FaRobot,
-      label: "Support Bot",
-    },
-    {
-      path: "/dashboard/settings",
-      icon: FaCog,
-      label: "Settings",
-    },
+    { path: "/dashboard", icon: FaTachometerAlt, label: "Dashboard", end: true },
+    { path: "/dashboard/period-tracker", icon: FaCalendarAlt, label: "Period Tracker" },
+    { path: "/dashboard/mindfulness", icon: FaLeaf, label: "Mindfulness" },
+    { path: "/dashboard/community", icon: FaUsers, label: "Community" },
+    { path: "/dashboard/articles", icon: FaUsers, label: "Articles" },
+    { path: "/dashboard/resources", icon: FaBook, label: "Resources" },
+    { path: "/dashboard/support-bot", icon: FaRobot, label: "Support Bot" },
+    { path: "/dashboard/settings", icon: FaCog, label: "Settings" },
   ];
 
   const quotes = [
@@ -279,7 +224,6 @@ Generated on: ${new Date().toLocaleString()}
     "Self-care is not selfish, it's essential.",
     "You are worthy of rest, care, and kindness.",
     "Listen to your body, it knows the way.",
-    "Every woman's journey is unique and beautiful.",
   ];
 
   const [currentQuote, setCurrentQuote] = useState(0);
@@ -288,15 +232,12 @@ Generated on: ${new Date().toLocaleString()}
     const quoteInterval = setInterval(() => {
       setCurrentQuote((prev) => (prev + 1) % quotes.length);
     }, 8000);
-
     return () => clearInterval(quoteInterval);
   }, []);
 
   if (!user) return null;
 
   const isDashboardHome = location.pathname === "/dashboard";
-
-  // Check if user has completed onboarding with period data
   const hasPeriodData = cycleData && cycleData.cycleLength > 0 && cycleData.periodDates && cycleData.periodDates.length > 0;
 
   return (
@@ -316,8 +257,8 @@ Generated on: ${new Date().toLocaleString()}
           >
             <GiFlowerStar />
           </motion.div>
-          <span className="brand-title">HerCare</span>
-          <small>Women Wellness</small>
+          <span className="brand-title">Her<span style={{ color: '#D47E8E' }}>CARE</span></span>
+          <small>Women's Wellness</small>
         </div>
 
         <nav className="nav-menu">
@@ -339,45 +280,37 @@ Generated on: ${new Date().toLocaleString()}
         <motion.button
           className="logout-btn"
           onClick={logout}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.95 }}
         >
           <FaSignOutAlt /> Logout
         </motion.button>
       </motion.aside>
 
-      {/* Main */}
-      <motion.main
-        className="main-content"
-        variants={mainContentVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      {/* Main Content */}
+      <main className="main-content">
         {/* Top Bar */}
         <div className="top-bar">
           <div className="greeting-section">
-            <motion.div
-              className="greeting-icon"
-              animate={{
-                scale: [1, 1.2, 1],
-                rotate: [0, 10, -10, 0],
-              }}
-              transition={{ duration: 0.5 }}
-            >
-              🌸
-            </motion.div>
-            <div>
-              <h2 className="greeting-text">
-                {greeting}, <span className="highlight-name">{user.name || "Bhumiii"} 💖</span>
-              </h2>
-              <p className="user-subtext">Welcome back to your wellness space</p>
+            <div className="greeting-avatar">
+              <img 
+                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" 
+                alt="Profile"
+                className="avatar-img"
+              />
+              <div>
+                <h2 className="greeting-text">
+                  {greeting}, <span className="highlight-name">{user.name || "Bhumiii"}</span> 👋
+                </h2>
+                <p className="user-subtext">Welcome back to your wellness journey</p>
+              </div>
             </div>
           </div>
 
           <div className="top-bar-right">
             <motion.button
               className="report-btn"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.95 }}
               onClick={downloadReport}
             >
@@ -388,8 +321,8 @@ Generated on: ${new Date().toLocaleString()}
             <div className="date-time">
               <span>
                 {currentTime.toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
+                  weekday: "short",
+                  month: "short",
                   day: "numeric",
                 })}
               </span>
@@ -403,7 +336,7 @@ Generated on: ${new Date().toLocaleString()}
 
             <motion.div
               className="notification-icon"
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowNotifications(!showNotifications)}
             >
@@ -416,7 +349,6 @@ Generated on: ${new Date().toLocaleString()}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/dashboard/profile")}
-              style={{ cursor: "pointer" }}
             >
               <FaUserCircle />
             </motion.div>
@@ -428,14 +360,14 @@ Generated on: ${new Date().toLocaleString()}
           {showNotifications && (
             <motion.div
               className="notifications-dropdown"
-              variants={notificationVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.2 }}
             >
-              <h4>Notifications</h4>
+              <h4>🔔 Notifications</h4>
               <div className="notification-item">
-                <span>🔔</span>
+                <span>📅</span>
                 <p>{hasPeriodData && cycleData.daysUntilPeriod !== null && cycleData.daysUntilPeriod >= 0 
                   ? `Your period is expected in ${cycleData.daysUntilPeriod} days`
                   : hasPeriodData && cycleData.daysUntilPeriod !== null && cycleData.daysUntilPeriod < 0
@@ -443,11 +375,11 @@ Generated on: ${new Date().toLocaleString()}
                   : "Complete your period setup for predictions"}</p>
               </div>
               <div className="notification-item">
-                <span>💪</span>
+                <span>🧘</span>
                 <p>New mindfulness exercise available</p>
               </div>
               <div className="notification-item">
-                <span>👥</span>
+                <span>💬</span>
                 <p>3 new messages in Community</p>
               </div>
             </motion.div>
@@ -456,29 +388,89 @@ Generated on: ${new Date().toLocaleString()}
 
         {isDashboardHome && (
           <>
-            {/* Welcome */}
-            <motion.div
-              className="welcome-section"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <h1 className="page-title">Welcome Back, {user.name} 🌸</h1>
-              <p className="page-subtitle">Your safe space for balance, care & confidence</p>
-            </motion.div>
+            {/* Stats Cards */}
+            <div className="stats-grid">
+              <motion.div 
+                className="stat-card"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <div className="stat-icon pink">
+                  <FaCalendarAlt />
+                </div>
+                <div className="stat-info">
+                  <h3>{cycleData.currentDay || 0}</h3>
+                  <p>Cycle Day</p>
+                </div>
+              </motion.div>
 
-            {/* Quote */}
-            <motion.div className="quote-card">
+              <motion.div 
+                className="stat-card"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <div className="stat-icon purple">
+                  <FaHeart />
+                </div>
+                <div className="stat-info">
+                  <h3>{cycleData.phase || "Not Set"}</h3>
+                  <p>Current Phase</p>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                className="stat-card"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <div className="stat-icon green">
+                  <FaChartLine />
+                </div>
+                <div className="stat-info">
+                  <h3>{cycleData.healthScore || 0}%</h3>
+                  <p>Health Score</p>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                className="stat-card"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <div className="stat-icon orange">
+                  <FaCalendarAlt />
+                </div>
+                <div className="stat-info">
+                  <h3>{cycleData.daysUntilPeriod !== null && cycleData.daysUntilPeriod >= 0 
+                    ? `${cycleData.daysUntilPeriod}d` 
+                    : "—"}</h3>
+                  <p>Next Period</p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Quote Card */}
+            <motion.div 
+              className="quote-card"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
               <FaQuoteLeft className="quote-icon" />
               <AnimatePresence mode="wait">
                 <motion.p
                   key={currentQuote}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.4 }}
                   className="quote-text"
                 >
-                  {quotes[currentQuote]}
+                  "{quotes[currentQuote]}"
                 </motion.p>
               </AnimatePresence>
             </motion.div>
@@ -488,26 +480,32 @@ Generated on: ${new Date().toLocaleString()}
               className="cycle-status-card"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
             >
               {loading ? (
                 <div className="loading-placeholder">Loading your cycle data...</div>
               ) : !hasPeriodData ? (
                 <div className="no-data-message">
+                  <img 
+                    src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=200&h=200&fit=crop" 
+                    alt="Get started"
+                    className="no-data-image"
+                  />
                   <h3>🌸 Complete Your Period Setup</h3>
                   <p>Log your first period to see your cycle information and predictions.</p>
                   <button 
                     className="setup-btn"
                     onClick={() => navigate("/dashboard/period-tracker")}
                   >
-                    Go to Period Tracker
+                    Go to Period Tracker →
                   </button>
                 </div>
               ) : (
                 <>
                   <div className="cycle-header">
                     <div>
-                      <h2>🌸 Current Cycle</h2>
-                      <p>{cycleData.phase}</p>
+                      <h2>🌸 Your Cycle</h2>
+                      <p className="cycle-phase">{cycleData.phase}</p>
                     </div>
                     <div className="cycle-day-circle">
                       <span>Day</span>
@@ -547,8 +545,8 @@ Generated on: ${new Date().toLocaleString()}
                         : "Not available"}</p>
                     </div>
                     <div className="detail-box">
-                      <h4>💫 Phase</h4>
-                      <p>{cycleData.phase}</p>
+                      <h4>📅 Cycle Length</h4>
+                      <p>{cycleData.cycleLength} days</p>
                     </div>
                     <div className="detail-box">
                       <h4>😊 Mood</h4>
@@ -559,46 +557,61 @@ Generated on: ${new Date().toLocaleString()}
               )}
             </motion.div>
 
-            {/* Cards */}
-            <motion.div className="dashboard-cards">
-              <motion.div
-                className="card"
-                whileHover="hover"
-                onClick={() => navigate("/dashboard/period-tracker")}
-              >
-                <div className="card-icon">📅</div>
-                <h3>Track your cycle</h3>
-                <p>Monitor your menstrual cycle, symptoms, and predictions</p>
-                <span className="card-link">View Tracker →</span>
-              </motion.div>
+            {/* Quick Actions */}
+            <motion.div 
+              className="quick-actions"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              <h3 className="section-title">Quick Actions</h3>
+              <div className="action-grid">
+                <motion.div 
+                  className="action-card"
+                  whileHover={{ y: -4, boxShadow: "0 8px 24px rgba(0,0,0,0.08)" }}
+                  onClick={() => navigate("/dashboard/period-tracker")}
+                >
+                  <div className="action-icon">📊</div>
+                  <h4>Log Period</h4>
+                  <p>Track your cycle</p>
+                </motion.div>
 
-              <motion.div
-                className="card"
-                whileHover="hover"
-                onClick={() => navigate("/dashboard/mindfulness")}
-              >
-                <div className="card-icon">🧘</div>
-                <h3>Mindfulness</h3>
-                <p>Guided meditations and breathing exercises</p>
-                <span className="card-link">Start →</span>
-              </motion.div>
+                <motion.div 
+                  className="action-card"
+                  whileHover={{ y: -4, boxShadow: "0 8px 24px rgba(0,0,0,0.08)" }}
+                  onClick={() => navigate("/dashboard/mindfulness")}
+                >
+                  <div className="action-icon">🧘</div>
+                  <h4>Meditate</h4>
+                  <p>Find your calm</p>
+                </motion.div>
 
-              <motion.div
-                className="card"
-                whileHover="hover"
-                onClick={() => navigate("/dashboard/community")}
-              >
-                <div className="card-icon">💬</div>
-                <h3>Community support</h3>
-                <p>Connect with women on similar journeys</p>
-                <span className="card-link">Join →</span>
-              </motion.div>
+                <motion.div 
+                  className="action-card"
+                  whileHover={{ y: -4, boxShadow: "0 8px 24px rgba(0,0,0,0.08)" }}
+                  onClick={() => navigate("/dashboard/community")}
+                >
+                  <div className="action-icon">💬</div>
+                  <h4>Connect</h4>
+                  <p>Join community</p>
+                </motion.div>
+
+                <motion.div 
+                  className="action-card"
+                  whileHover={{ y: -4, boxShadow: "0 8px 24px rgba(0,0,0,0.08)" }}
+                  onClick={downloadReport}
+                >
+                  <div className="action-icon">📄</div>
+                  <h4>Report</h4>
+                  <p>Download insights</p>
+                </motion.div>
+              </div>
             </motion.div>
           </>
         )}
 
         <Outlet />
-      </motion.main>
+      </main>
     </div>
   );
 }

@@ -1274,5 +1274,201 @@ def get_dashboard_data(email):
         return jsonify({'error': str(e)}), 500
 # -------------------- RUN --------------------
 
+
+
+
+
+
+# =====================================================
+# 📰 ARTICLES
+# =====================================================
+
+@app.route("/articles", methods=["GET"])
+def get_articles():
+    try:
+        category = request.args.get("category")
+
+        query = {
+            "is_active": True
+        }
+
+        # 🔎 Filter by category if provided
+        if category:
+            query["category"] = category
+
+        articles = list(
+            mongo.db.articles.find(query).sort("created_at", -1)
+        )
+
+        result = []
+
+        for article in articles:
+            result.append({
+                "id": str(article["_id"]),
+                "title": article.get("title", ""),
+                "description": article.get("description", ""),
+                "category": article.get("category", ""),
+                "tag": article.get("tag", ""),
+                "source": article.get("source", ""),
+                "article_url": article.get("article_url", ""),
+                "image": article.get("image", ""),
+                "likes": article.get("likes", 0)
+            })
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        print("❌ ARTICLES ERROR:", str(e))
+        return jsonify({
+            "error": "Unable to fetch articles"
+        }), 500
+
+
+
+@app.route("/articles/<article_id>", methods=["GET"])
+def get_article(article_id):
+    try:
+        article = mongo.db.articles.find_one({
+            "_id": ObjectId(article_id),
+            "is_active": True
+        })
+
+        if not article:
+            return jsonify({
+                "error": "Article not found"
+            }), 404
+
+        return jsonify({
+            "id": str(article["_id"]),
+            "title": article.get("title", ""),
+            "description": article.get("description", ""),
+            "category": article.get("category", ""),
+            "tag": article.get("tag", ""),
+            "source": article.get("source", ""),
+            "article_url": article.get("article_url", ""),
+            "image": article.get("image", ""),
+            "likes": article.get("likes", 0)
+        }), 200
+
+    except Exception as e:
+        print("❌ ARTICLE ERROR:", str(e))
+        return jsonify({
+            "error": "Invalid article ID"
+        }), 400
+
+
+
+@app.route("/articles/interactions/<email>", methods=["GET"])
+def get_article_interactions(email):
+
+    interactions = list(
+        mongo.db.article_interactions.find(
+            {"email": email},
+            {"_id": 0}
+        )
+    )
+
+    return jsonify(interactions), 200
+
+
+@app.route("/articles/like", methods=["POST"])
+def like_article():
+
+    data = request.get_json()
+
+    email = data.get("email")
+    article_id = data.get("article_id")
+
+    if not email or not article_id:
+        return jsonify({"error": "Missing data"}), 400
+
+    existing = mongo.db.article_interactions.find_one({
+        "email": email,
+        "article_id": article_id
+    })
+
+    if existing:
+
+        new_status = not existing.get("liked", False)
+
+        mongo.db.article_interactions.update_one(
+            {"_id": existing["_id"]},
+            {
+                "$set": {
+                    "liked": new_status,
+                    "updated_at": datetime.datetime.utcnow()
+                }
+            }
+        )
+
+    else:
+
+        mongo.db.article_interactions.insert_one({
+            "email": email,
+            "article_id": article_id,
+            "liked": True,
+            "saved": False,
+            "updated_at": datetime.datetime.utcnow()
+        })
+
+        new_status = True
+
+    return jsonify({
+        "liked": new_status
+    }), 200
+
+
+@app.route("/articles/save", methods=["POST"])
+def save_article():
+
+    data = request.get_json()
+
+    email = data.get("email")
+    article_id = data.get("article_id")
+
+    if not email or not article_id:
+        return jsonify({"error": "Missing data"}), 400
+
+    existing = mongo.db.article_interactions.find_one({
+        "email": email,
+        "article_id": article_id
+    })
+
+    if existing:
+
+        new_status = not existing.get("saved", False)
+
+        mongo.db.article_interactions.update_one(
+            {"_id": existing["_id"]},
+            {
+                "$set": {
+                    "saved": new_status,
+                    "updated_at": datetime.datetime.utcnow()
+                }
+            }
+        )
+
+    else:
+
+        mongo.db.article_interactions.insert_one({
+            "email": email,
+            "article_id": article_id,
+            "liked": False,
+            "saved": True,
+            "updated_at": datetime.datetime.utcnow()
+        })
+
+        new_status = True
+
+    return jsonify({
+        "saved": new_status
+    }), 200
+
+
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
+
+
+
+
+    

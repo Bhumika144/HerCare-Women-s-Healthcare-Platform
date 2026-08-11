@@ -24,13 +24,8 @@ const Landing = () => {
   };
 
   const fadeInLeft = {
-    hidden: { opacity: 0, x: -50 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
-  };
-
-  const fadeInRight = {
-    hidden: { opacity: 0, x: 50 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
+    hidden: { opacity: 0, x: -60 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" } }
   };
 
   const staggerContainer = {
@@ -76,27 +71,35 @@ const Landing = () => {
         <div className="nav-container">
           <div className="logo" onClick={() => scrollToSection('home')} style={{ cursor: 'pointer' }}>
             <GiFlowerStar className="logo-icon" />
-            <span>HerCare</span>
+            <span>Her<span style={{ color: '#D47E8E' }}>CARE</span></span>
           </div>
           <ul className="nav-links">
             <li><a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>Home</a></li>
             <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About</a></li>
-            <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }}>Services</a></li>
+            <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }}>Features</a></li>
+            <li><a href="#wellness" onClick={(e) => { e.preventDefault(); scrollToSection('wellness'); }}>Wellness</a></li>
             <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a></li>
           </ul>
           <div className="nav-buttons">
             <Link to="/login">
-              <button className="nav-login">Login</button>
+              <button className="nav-login">Sign In</button>
             </Link>
             <Link to="/signup">
-              <button className="nav-signup">Sign Up</button>
+              <button className="nav-signup">Get Started</button>
             </Link>
           </div>
         </div>
       </motion.nav>
 
-      {/* Hero Section */}
+      {/* Hero Section - Left aligned content */}
       <section id="home" className="hero">
+        <div className="hero-background">
+          <img 
+            src="/src/assets/images/Landing.png" 
+            alt="Young woman sitting comfortably at home using smartphone" 
+          />
+          <div className="hero-overlay"></div>
+        </div>
         <div className="hero-container">
           <motion.div 
             className="hero-content"
@@ -104,74 +107,60 @@ const Landing = () => {
             initial="hidden"
             animate="visible"
           >
-            <motion.div variants={fadeInUp}>
-              <span className="hero-badge">✨ Empowering Women's Health</span>
-            </motion.div>
-            <motion.h1 variants={fadeInUp}>
-              Your Journey to <span className="gradient-text">Wellness</span> Starts Here
+            <motion.h1 variants={fadeInLeft}>
+              Your cycle.<br />
+              <span className="highlight-text">Your health.</span><br />
+              <span className="accent-text">Your care.</span>
             </motion.h1>
-            <motion.p variants={fadeInUp}>
-              Personalized healthcare solutions designed for every stage of a woman's life. 
-              From reproductive health to mental wellness, we've got you covered.
+            <motion.p variants={fadeInLeft} className="hero-description">
+              Your personal space to understand your cycle, care for your body, and build healthier everyday habits.
             </motion.p>
-            <motion.div variants={fadeInUp} className="hero-buttons">
+            <motion.div variants={fadeInLeft} className="hero-buttons">
               <Link to="/signup">
-                <button className="btn-primary">
-                  Start Your Journey ✨
-                </button>
+                <button className="btn-primary">Get Started</button>
               </Link>
               <Link to="/login">
-                <button className="btn-secondary">
-                  Sign In →
-                </button>
+                <button className="btn-outline">Explore HerCARE</button>
               </Link>
             </motion.div>
-          </motion.div>
-          <motion.div 
-            className="hero-illustration"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <div className="floating-icon icon-1">
-              <FaHeartbeat />
-            </div>
-            <div className="floating-icon icon-2">
-              <GiFemale />
-            </div>
-            <div className="floating-icon icon-3">
-              <FaCalendarCheck />
-            </div>
-            <div className="floating-icon icon-4">
-              <GiHealthNormal />
-            </div>
-            <div className="hero-circle"></div>
+            <motion.p variants={fadeInLeft} className="hero-trust">
+              Private • Personalized • Built for Women
+            </motion.p>
           </motion.div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="features" style={{ paddingTop: '5rem' }}>
-        <motion.div 
-          className="section-header"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2>About <span className="gradient-text">HerCare</span></h2>
-          <p>We're on a mission to transform women's healthcare worldwide</p>
-        </motion.div>
-        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', padding: '2rem' }}>
-          <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#555' }}>
-            HerCare was founded with a simple yet powerful vision: to provide every woman with 
-            accessible, personalized, and compassionate healthcare. We combine cutting-edge technology 
-            with expert medical guidance to create a holistic approach to women's wellness.
-          </p>
+      {/* Feature Strip */}
+      <section className="feature-strip">
+        <div className="container">
+          <div className="feature-item">
+            <div className="feature-icon">🔄</div>
+            <span>Cycle Tracking</span>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">🏋️‍♀️</div>
+            <span>Exercise</span>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">💧</div>
+            <span>Hydration</span>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">😴</div>
+            <span>Sleep</span>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">🧘</div>
+            <span>Mood</span>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">🌸</div>
+            <span>Self-Care</span>
+          </div>
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Services/Features Section */}
       <section id="services" className="features">
         <motion.div 
           className="section-header"
@@ -180,8 +169,8 @@ const Landing = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>Why Choose <span className="gradient-text">HerCare</span></h2>
-          <p>Comprehensive care tailored to your unique needs at every life stage</p>
+          <h2>Everything you need for your <span className="gradient-text">wellbeing</span></h2>
+          <p>HerCARE brings cycle tracking, wellness and self-care together in one place, tailored specifically for you.</p>
         </motion.div>
 
         <motion.div 
@@ -197,11 +186,9 @@ const Landing = () => {
             whileHover="hover"
             animate="rest"
           >
-            <motion.div className="feature-icon" variants={cardHover}>
-              <FaHeartbeat />
-            </motion.div>
-            <h3>Holistic Care</h3>
-            <p>Complete wellness approach combining physical, mental, and emotional health support.</p>
+            <motion.div className="feature-icon" variants={cardHover}>📅</motion.div>
+            <h3>Cycle Tracking</h3>
+            <p>Understand your patterns and predict your cycle with precision.</p>
           </motion.div>
 
           <motion.div 
@@ -210,11 +197,9 @@ const Landing = () => {
             whileHover="hover"
             animate="rest"
           >
-            <motion.div className="feature-icon" variants={cardHover}>
-              <FaCalendarCheck />
-            </motion.div>
-            <h3>Personalized Plans</h3>
-            <p>Custom health plans based on your unique biology, lifestyle, and goals.</p>
+            <motion.div className="feature-icon" variants={cardHover}>✨</motion.div>
+            <h3>Personalized Insights</h3>
+            <p>Actionable recommendations based on your unique health data.</p>
           </motion.div>
 
           <motion.div 
@@ -223,13 +208,36 @@ const Landing = () => {
             whileHover="hover"
             animate="rest"
           >
-            <motion.div className="feature-icon" variants={cardHover}>
-              <FaShieldAlt />
-            </motion.div>
-            <h3>Safe & Private</h3>
-            <p>Your data is protected with bank-level security and complete confidentiality.</p>
+            <motion.div className="feature-icon" variants={cardHover}>☀️</motion.div>
+            <h3>Daily Wellness</h3>
+            <p>Track hydration, sleep, and exercise to support your energy.</p>
+          </motion.div>
+
+          <motion.div 
+            className="feature-card"
+            variants={fadeInUp}
+            whileHover="hover"
+            animate="rest"
+          >
+            <motion.div className="feature-icon" variants={cardHover}>🌿</motion.div>
+            <h3>Self-Care</h3>
+            <p>Build mindful habits that nurture your mental and emotional health.</p>
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* Yoga Image Break Section */}
+      <section id="wellness" className="image-break-section">
+        <img 
+          src="/src/assets/images/yoga.png" 
+          alt="Young woman stretching and exercising in a bright studio" 
+          className="break-image"
+        />
+        <div className="break-overlay"></div>
+        <div className="image-break-content">
+          <h2>Move with purpose</h2>
+          <p>Tailored exercise routines that align with your cycle and energy levels, helping you feel strong every day.</p>
+        </div>
       </section>
 
       {/* Glassmorphism CTA Section */}
@@ -248,14 +256,14 @@ const Landing = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                Ready to Transform Your Health?
+                Understand your body. Empower your life.
               </motion.h3>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                Join thousands of women who've discovered a better way to care for themselves.
+                Start building a healthier relationship with your wellbeing.
               </motion.p>
               <Link to="/signup">
                 <motion.button 
@@ -275,7 +283,7 @@ const Landing = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="features" style={{ paddingBottom: '3rem' }}>
+      <section id="contact" className="contact-section">
         <motion.div 
           className="section-header"
           initial={{ opacity: 0, y: 30 }}
@@ -286,12 +294,10 @@ const Landing = () => {
           <h2>Get in <span className="gradient-text">Touch</span></h2>
           <p>We'd love to hear from you. Reach out with any questions or concerns.</p>
         </motion.div>
-        <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ marginBottom: '1rem' }}>📧 hello@hercare.com</p>
-            <p style={{ marginBottom: '1rem' }}>📞 +1 (555) 123-4567</p>
-            <p>📍 123 Wellness Ave, Suite 100, San Francisco, CA 94105</p>
-          </div>
+        <div className="contact-info">
+          <p>📧 hello@hercare.com</p>
+          <p>📞 +1 (555) 123-4567</p>
+          <p>📍 123 Wellness Ave, Suite 100, San Francisco, CA 94105</p>
         </div>
       </section>
 
@@ -302,9 +308,9 @@ const Landing = () => {
             <div className="footer-section">
               <div className="footer-logo">
                 <GiFlowerStar className="footer-logo-icon" />
-                <span>HerCare</span>
+                <span>Her<span style={{ color: '#D47E8E' }}>CARE</span></span>
               </div>
-              <p>Empowering women through personalized healthcare solutions.</p>
+              <p>Empowering women to take control of their health, cycle, and daily wellness through personalized care.</p>
               <div className="social-links">
                 <a href="#"><FaFacebookF /></a>
                 <a href="#"><FaTwitter /></a>
@@ -313,34 +319,34 @@ const Landing = () => {
               </div>
             </div>
             <div className="footer-section">
-              <h4>Quick Links</h4>
+              <h4>Platform</h4>
               <ul>
-                <li><a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>Home</a></li>
+                <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }}>Features</a></li>
+                <li><a href="#wellness" onClick={(e) => { e.preventDefault(); scrollToSection('wellness'); }}>Wellness Hub</a></li>
+                <li><a href="#">Cycle Insights</a></li>
+                <li><a href="#">Community</a></li>
+              </ul>
+            </div>
+            <div className="footer-section">
+              <h4>Company</h4>
+              <ul>
                 <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About Us</a></li>
-                <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }}>Services</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press Kit</a></li>
                 <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a></li>
               </ul>
             </div>
             <div className="footer-section">
-              <h4>Resources</h4>
+              <h4>Legal</h4>
               <ul>
-                <li><a href="#">Health Blog</a></li>
-                <li><a href="#">Wellness Guide</a></li>
-                <li><a href="#">FAQ</a></li>
-                <li><a href="#">Support</a></li>
-              </ul>
-            </div>
-            <div className="footer-section">
-              <h4>Contact Us</h4>
-              <ul>
-                <li>📧 hello@hercare.com</li>
-                <li>📞 +1 (555) 123-4567</li>
-                <li>📍 123 Wellness Ave, Suite 100</li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">HIPAA</a></li>
               </ul>
             </div>
           </div>
           <div className="footer-bottom">
-            <p>&copy; 2024 HerCare. All rights reserved. | Empowering women's health worldwide</p>
+            <p>&copy; 2026 HerCARE. All rights reserved.</p>
           </div>
         </div>
       </footer>
