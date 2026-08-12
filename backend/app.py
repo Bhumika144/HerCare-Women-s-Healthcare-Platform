@@ -15,6 +15,10 @@ from email_utils import send_otp_email  # make sure this function works
 from bson import ObjectId
 import requests
 import os
+import base64
+import cv2
+import numpy as np
+from deepface import DeepFace
 import threading
 import time
 from dotenv import load_dotenv
@@ -31,7 +35,7 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# to verify my commite on github recheck
+
 
 mongo_uri = os.getenv("MONGO_URI")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
@@ -1468,6 +1472,103 @@ def save_article():
     return jsonify({
         "saved": new_status
     }), 200
+
+
+# ---------------------------------------------
+
+def get_recommendation(emotion):
+
+    recommendations = {
+        "happy": "Keep up your positive energy 💖",
+        "sad": "Try a 5-minute meditation session 🧘",
+        "angry": "Take a deep breathing exercise 🌸",
+        "fear": "Listen to calming music 🎵",
+        "neutral": "Stay hydrated and active 💧",
+        "surprise": "Take a moment to relax 🌼",
+        "disgust": "Take some time to relax and care for yourself 🌷"
+    }
+
+    return recommendations.get(
+        emotion,
+        "Take care of yourself 💕"
+    )
+
+# ----------------------------------------------
+@app.route("/emotion-detect", methods=["POST"])
+def emotion_detect():
+
+    try:
+        data = request.get_json()
+
+        image_data = data.get("image")
+        email = data.get("email")
+
+        if not image_data:
+            return jsonify({
+                "error": "No image received"
+            }), 400
+
+        # Remove data:image/jpeg;base64, prefix
+        image_data = image_data.split(",")[1]
+
+        # Decode image
+        image_bytes = base64.b64decode(image_data)
+
+        np_arr = np.frombuffer(
+            image_bytes,
+            np.uint8
+        )
+
+        frame = cv2.imdecode(
+            np_arr,
+            cv2.IMREAD_COLOR
+        )
+
+        # Detect emotion using DeepFace
+        result = DeepFace.analyze(
+            frame,
+            actions=["emotion"],
+            enforce_detection=False
+        )
+
+        # Get dominant emotion
+        emotion = str(
+            result[0]["dominant_emotion"]
+        )
+
+        # Convert NumPy float32 to normal Python float
+        confidence = float(
+            max(result[0]["emotion"].values())
+        )
+
+        # Get recommendation
+        recommendation = get_recommendation(emotion)
+
+        # Save only emotion data to MongoDB
+        mongo.db.emotion_logs.insert_one({
+            "email": email,
+            "emotion": emotion,
+            "confidence": confidence,
+            "recommendation": recommendation,
+            "timestamp": datetime.datetime.utcnow()
+        })
+
+        # Send result to React
+        return jsonify({
+            "emotion": emotion,
+            "confidence": confidence,
+            "recommendation": recommendation
+        }), 200
+
+    except Exception as e:
+
+        print("Emotion Detection Error:", str(e))
+
+        return jsonify({
+            "error": str(e)
+        }), 500
+
+
 
 
 if __name__ == "__main__":

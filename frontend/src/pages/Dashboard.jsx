@@ -212,6 +212,7 @@ Generated on: ${new Date().toLocaleString()}
     { path: "/dashboard", icon: FaTachometerAlt, label: "Dashboard", end: true },
     { path: "/dashboard/period-tracker", icon: FaCalendarAlt, label: "Period Tracker" },
     { path: "/dashboard/mindfulness", icon: FaLeaf, label: "Mindfulness" },
+    { path: "/dashboard/emotion-tracker", icon: FaLeaf, label: "EmotionTracker" },
     { path: "/dashboard/community", icon: FaUsers, label: "Community" },
     { path: "/dashboard/articles", icon: FaUsers, label: "Articles" },
     { path: "/dashboard/resources", icon: FaBook, label: "Resources" },
