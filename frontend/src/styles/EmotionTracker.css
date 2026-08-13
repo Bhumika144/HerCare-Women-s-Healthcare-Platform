@@ -1,0 +1,594 @@
+/* =========================
+   EMOTION TRACKER PAGE
+   ========================= */
+
+.emotion-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px 60px 20px;
+  position: relative;
+}
+
+/* =========================
+   PAGE HEADER
+   ========================= */
+
+.emotion-page-header {
+  text-align: center;
+  padding: 10px 0 30px 0;
+}
+
+.emotion-page-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0 0 8px 0;
+}
+
+.emotion-page-header p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+/* =========================
+   WEBCAM SECTION - TOP (Smaller)
+   ========================= */
+
+.emotion-webcam-section {
+  max-width: 500px;
+  margin: 0 auto 40px auto;
+  text-align: center;
+}
+
+.emotion-webcam-wrapper {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: #f8f9fa;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.emotion-webcam {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+/* Loading Overlay */
+
+.emotion-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  gap: 12px;
+}
+
+.emotion-loading-overlay p {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.emotion-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #ff6b9a;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.emotion-webcam-hint {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #888;
+}
+
+/* =========================
+   BOTTOM GRID - 2 Columns
+   ========================= */
+
+.emotion-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* =========================
+   LEFT COLUMN - Detection & Results
+   ========================= */
+
+.emotion-left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Detect Button */
+
+.emotion-detect-btn {
+  width: 100%;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 12px;
+  background: #ff6b9a;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  letter-spacing: 0.5px;
+}
+
+.emotion-detect-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 154, 0.3);
+}
+
+.emotion-detect-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.emotion-btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+}
+
+/* Result Container */
+
+.emotion-result-container {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 2px solid #f0f0f0;
+}
+
+.emotion-result-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.emotion-result-header span {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #ff6b9a;
+  text-transform: uppercase;
+  background: #fff0f5;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.emotion-result-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0;
+}
+
+/* Emotion Display */
+
+.emotion-result-emotion {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #ff6b9a;
+  margin-bottom: 16px;
+}
+
+.emotion-result-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.emotion-result-text h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0 0 3px 0;
+  text-transform: capitalize;
+}
+
+.emotion-result-text p {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+/* Recommendation */
+
+.emotion-result-recommendation {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: #fff8f5;
+  border-radius: 12px;
+  align-items: flex-start;
+}
+
+.emotion-result-recommendation-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.emotion-result-recommendation h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0 0 4px 0;
+}
+
+.emotion-result-recommendation p {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Comparison Message */
+
+.emotion-comparison-message {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.emotion-comparison-message.match {
+  background: #eafaf1;
+  border-left: 4px solid #2ecc71;
+  color: #1a7a4a;
+}
+
+.emotion-comparison-message.mismatch {
+  background: #fef9e7;
+  border-left: 4px solid #f39c12;
+  color: #7d6608;
+}
+
+.emotion-comparison-message p {
+  margin: 0;
+}
+
+/* Waiting State */
+
+.emotion-result-waiting {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.emotion-result-waiting-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.emotion-result-waiting p {
+  font-size: 16px;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
+.emotion-result-waiting-hint {
+  font-size: 13px;
+  color: #999;
+}
+
+/* Error State */
+
+.emotion-result-error {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #fee;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 4px solid #e74c3c;
+}
+
+.emotion-result-error p {
+  margin: 0;
+  color: #c0392b;
+  font-size: 14px;
+}
+
+/* =========================
+   RIGHT COLUMN - User Mood
+   ========================= */
+
+.emotion-right-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.emotion-mood-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 2px solid #f0f0f0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.emotion-mood-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.emotion-mood-header span {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #ff6b9a;
+  text-transform: uppercase;
+  background: #fff0f5;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.emotion-mood-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0;
+}
+
+/* Mood Options */
+
+.emotion-mood-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.emotion-mood-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.emotion-mood-option {
+  padding: 12px 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 13px;
+  font-weight: 500;
+  color: #2d2d2d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.emotion-mood-option span {
+  font-size: 24px;
+}
+
+.emotion-mood-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.emotion-mood-option.active {
+  border-width: 2px;
+}
+
+.emotion-mood-submit {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  background: #ff6b9a;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.emotion-mood-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 154, 0.3);
+}
+
+.emotion-mood-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mood Confirmed */
+
+.emotion-mood-confirmed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.emotion-mood-confirmed-icon {
+  font-size: 40px;
+}
+
+.emotion-mood-confirmed h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0;
+}
+
+.emotion-mood-confirmed p {
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+}
+
+.emotion-mood-confirmed p strong {
+  color: #ff6b9a;
+  text-transform: capitalize;
+}
+
+.emotion-mood-change {
+  padding: 10px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background: white;
+  color: #666;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.emotion-mood-change:hover {
+  border-color: #ff6b9a;
+  color: #ff6b9a;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+
+@media (max-width: 900px) {
+  .emotion-bottom-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .emotion-mood-card {
+    height: auto;
+  }
+
+  .emotion-mood-options {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .emotion-page {
+    padding: 20px 12px 40px 12px;
+  }
+
+  .emotion-page-header h1 {
+    font-size: 24px;
+  }
+
+  .emotion-page-header p {
+    font-size: 14px;
+  }
+
+  .emotion-webcam-section {
+    max-width: 100%;
+  }
+
+  .emotion-webcam-wrapper {
+    max-width: 300px;
+  }
+
+  .emotion-mood-options {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .emotion-result-container {
+    padding: 18px;
+  }
+
+  .emotion-result-emotion {
+    flex-direction: column;
+    text-align: center;
+    padding: 12px;
+  }
+
+  .emotion-result-recommendation {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .emotion-detect-btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .emotion-mood-card {
+    padding: 18px;
+  }
+
+  .emotion-mood-option {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+
+  .emotion-mood-option span {
+    font-size: 20px;
+  }
+
+  .emotion-result-waiting {
+    padding: 20px;
+  }
+
+  .emotion-result-waiting p {
+    font-size: 14px;
+  }
+
+  .emotion-comparison-message {
+    font-size: 13px;
+    padding: 12px 14px;
+  }
+}

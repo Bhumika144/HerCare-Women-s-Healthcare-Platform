@@ -1,0 +1,423 @@
+/* =========================
+   MINDFULNESS PAGE
+   ========================= */
+
+.mindfulness-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* =========================
+   HERO SECTION
+   ========================= */
+
+.mindfulness-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  padding: 60px 0 40px 0;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.mindfulness-hero-content {
+  text-align: left;
+}
+
+.mindfulness-small-title {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #ff6b9a;
+  text-transform: uppercase;
+  background: #fff0f5;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.mindfulness-hero-content h1 {
+  font-size: 44px;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+}
+
+.mindfulness-hero-content h1 span {
+  color: #ff6b9a;
+}
+
+.mindfulness-hero-content p {
+  font-size: 18px;
+  color: #666;
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0;
+}
+
+.mindfulness-hero-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mindfulness-hero-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(255, 107, 154, 0.15);
+}
+
+/* =========================
+   ACTIVITIES SECTION
+   ========================= */
+
+.mindfulness-activities {
+  padding: 60px 0;
+}
+
+.mindfulness-activities-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.mindfulness-activities-header span {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #ff6b9a;
+  text-transform: uppercase;
+  background: #fff0f5;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.mindfulness-activities-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0 0 12px 0;
+}
+
+.mindfulness-activities-header p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+/* =========================
+   CARDS GRID - 2x2 Layout
+   ========================= */
+
+.mindfulness-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.mindfulness-card {
+  background: white;
+  border-radius: 20px;
+  border: 2px solid #e0e0e0;
+  padding: 35px 30px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  position: relative;
+  min-height: 260px;
+}
+
+.mindfulness-card.hovered {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  border-color: #ff6b9a;
+}
+
+.mindfulness-card.clicked {
+  transform: scale(0.95);
+}
+
+/* Card Content */
+
+.mindfulness-card-content {
+  flex: 1;
+  width: 100%;
+}
+
+.mindfulness-card-content h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0 0 10px 0;
+}
+
+.mindfulness-card-content p {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+/* Card Benefit */
+
+.mindfulness-card-benefit {
+  margin-bottom: 20px;
+}
+
+.mindfulness-card-benefit span {
+  font-size: 14px;
+  color: #555;
+  background: #f8f9fa;
+  padding: 6px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  font-weight: 500;
+}
+
+/* Card Footer - Start Button */
+
+.mindfulness-card-footer {
+  width: 100%;
+  margin-top: auto;
+}
+
+.mindfulness-start-btn {
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.5px;
+}
+
+.mindfulness-start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mindfulness-start-btn:active {
+  transform: scale(0.95);
+}
+
+/* Hover effect on card - button gets brighter */
+
+.mindfulness-card.hovered .mindfulness-start-btn {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* =========================
+   DESCRIPTION DISPLAY
+   ========================= */
+
+.mindfulness-description {
+  margin-top: 40px;
+  padding: 24px 32px;
+  background: #f8f9fa;
+  border-radius: 14px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeIn 0.3s ease;
+  border-left: 4px solid #ff6b9a;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.mindfulness-description p {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   QUOTE SECTION
+   ========================= */
+
+.mindfulness-quote {
+  padding: 50px 0;
+  border-top: 2px solid #f0f0f0;
+}
+
+.mindfulness-quote-content {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+
+.mindfulness-quote-icon {
+  font-size: 60px;
+  color: #ff6b9a;
+  opacity: 0.3;
+  display: block;
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.mindfulness-quote-content p {
+  font-size: 22px;
+  color: #2d2d2d;
+  line-height: 1.6;
+  margin: 12px 0 20px 0;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.mindfulness-quote-author {
+  font-size: 14px;
+  color: #999;
+  letter-spacing: 1px;
+  font-style: normal;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+
+@media (max-width: 768px) {
+  .mindfulness-hero {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+    padding: 40px 0 30px 0;
+  }
+
+  .mindfulness-hero-content {
+    text-align: center;
+  }
+
+  .mindfulness-hero-content h1 {
+    font-size: 32px;
+  }
+
+  .mindfulness-hero-content p {
+    margin: 0 auto;
+  }
+
+  .mindfulness-hero-image {
+    order: -1;
+  }
+
+  .mindfulness-hero-image img {
+    max-width: 80%;
+  }
+
+  .mindfulness-cards-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 100%;
+  }
+
+  .mindfulness-card {
+    padding: 25px 20px;
+    min-height: 240px;
+  }
+
+  .mindfulness-card-content h3 {
+    font-size: 17px;
+  }
+
+  .mindfulness-card-content p {
+    font-size: 14px;
+  }
+
+  .mindfulness-card-benefit span {
+    font-size: 12px;
+    padding: 4px 12px;
+  }
+
+  .mindfulness-start-btn {
+    font-size: 14px;
+    padding: 12px 18px;
+  }
+
+  .mindfulness-activities-header h2 {
+    font-size: 26px;
+  }
+
+  .mindfulness-quote-content p {
+    font-size: 18px;
+  }
+
+  .mindfulness-description {
+    margin: 30px 16px 0 16px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .mindfulness-page {
+    padding: 0 12px;
+  }
+
+  .mindfulness-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 400px;
+  }
+
+  .mindfulness-hero-content h1 {
+    font-size: 26px;
+  }
+
+  .mindfulness-hero-content p {
+    font-size: 15px;
+  }
+
+  .mindfulness-card {
+    padding: 20px;
+    min-height: 200px;
+  }
+
+  .mindfulness-card-content h3 {
+    font-size: 16px;
+  }
+
+  .mindfulness-card-content p {
+    font-size: 13px;
+  }
+
+  .mindfulness-start-btn {
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+
+  .mindfulness-activities-header h2 {
+    font-size: 22px;
+  }
+
+  .mindfulness-card-benefit span {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+}

@@ -1,50 +1,49 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import "../styles/Mindfulness.css";
 
 export default function Mindfulness() {
   const navigate = useNavigate();
   const [hoveredButton, setHoveredButton] = useState(null);
   const [clickEffect, setClickEffect] = useState(null);
+  const [showDescription, setShowDescription] = useState(null);
 
-  const buttonStyle = {
-    padding: "15px 30px",
-    fontSize: "18px",
-    margin: "15px",
-    borderRadius: "10px",
-    border: "none",
-    cursor: "pointer",
-    backgroundColor: "#ff6b9a",
-    color: "white",
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "12px",
-    position: "relative",
-    overflow: "hidden"
+  const descriptions = {
+    period: "Gentle exercises to ease menstrual discomfort and cramps",
+    yoga: "Balance your body and mind with calming yoga poses",
+    meditation: "Find inner peace and reduce stress through guided meditation",
+    exercise: "Boost your energy and mood with general workouts"
   };
 
-  // Add interactive styles based on state
-  const getButtonStyle = (buttonName) => {
-    let style = { ...buttonStyle };
-    
-    if (hoveredButton === buttonName) {
-      style = {
-        ...style,
-        transform: "translateY(-2px)",
-        boxShadow: "0 5px 15px rgba(0,0,0,0.2)",
-        backgroundColor: "#ff477e",
-        transition: "all 0.3s ease"
-      };
+  const buttonConfigs = {
+    period: {
+      label: "Period Relief Exercises",
+      path: "/dashboard/mindfulness/period-exercise",
+      bgColor: "#ff6b9a",
+      description: "Gentle exercises to ease menstrual discomfort and cramps",
+      benefit: "Relieves cramps & reduces discomfort"
+    },
+    yoga: {
+      label: "Yoga",
+      path: "/dashboard/mindfulness/yoga",
+      bgColor: "#9b59b6",
+      description: "Balance your body and mind with calming yoga poses",
+      benefit: "Improves flexibility & reduces stress"
+    },
+    meditation: {
+      label: "Meditation",
+      path: "/dashboard/mindfulness/meditation",
+      bgColor: "#3498db",
+      description: "Find inner peace and reduce stress through guided meditation",
+      benefit: "Enhances focus & emotional wellbeing"
+    },
+    exercise: {
+      label: "General Exercise",
+      path: "/dashboard/mindfulness/exercise",
+      bgColor: "#2ecc71",
+      description: "Boost your energy and mood with general workouts",
+      benefit: "Boosts energy & improves mood"
     }
-    
-    if (clickEffect === buttonName) {
-      style = {
-        ...style,
-        transform: "scale(0.95)",
-        transition: "transform 0.1s ease"
-      };
-    }
-    
-    return style;
   };
 
   const handleButtonClick = (path, buttonName) => {
@@ -57,190 +56,150 @@ export default function Mindfulness() {
     }, 200);
   };
 
-  const descriptions = {
-    period: "Gentle exercises to ease menstrual discomfort and cramps",
-    yoga: "Balance your body and mind with calming yoga poses",
-    meditation: "Find inner peace and reduce stress through guided meditation",
-    exercise: "Boost your energy and mood with general workouts"
-  };
-
-  const [showDescription, setShowDescription] = useState(null);
-
-  // Button configurations with emoji/images
-  const buttonConfigs = {
-    period: {
-      emoji: "🌸",
-      label: "Period Relief Exercises",
-      path: "/dashboard/mindfulness/period-exercise"
-    },
-    yoga: {
-      emoji: "🧘‍♀️",
-      label: "Yoga",
-      path: "/dashboard/mindfulness/yoga"
-    },
-    meditation: {
-      emoji: "🕉️",
-      label: "Meditation",
-      path: "/dashboard/mindfulness/meditation"
-    },
-    exercise: {
-      emoji: "💪",
-      label: "General Exercise",
-      path: "/dashboard/mindfulness/exercise"
-    }
-  };
-
   return (
-    <div style={{ padding: "40px", textAlign: "center" }}>
-      <h1>Mindfulness 🧘</h1>
-      <br></br>
-      {/* Add a subtitle */}
-      <p style={{ 
-        color: "#666", 
-        fontSize: "18px", 
-        marginTop: "-10px",
-        marginBottom: "30px"
-      }}>
-        Choose an activity to begin your wellness journey
-      </p>
+    <div className="mindfulness-page">
 
-      <div style={{ marginTop: "40px" }}>
+      {/* =========================
+          HERO SECTION
+      ========================== */}
 
-        <button
-          style={getButtonStyle("period")}
-          onClick={() => handleButtonClick(buttonConfigs.period.path, "period")}
-          onMouseEnter={() => {
-            setHoveredButton("period");
-            setShowDescription("period");
-          }}
-          onMouseLeave={() => {
-            setHoveredButton(null);
-            setShowDescription(null);
-          }}
-        >
-          <span style={{ fontSize: "24px" }}>{buttonConfigs.period.emoji}</span>
-          {buttonConfigs.period.label}
-        </button>
+      <section className="mindfulness-hero">
 
-        <button
-          style={getButtonStyle("yoga")}
-          onClick={() => handleButtonClick(buttonConfigs.yoga.path, "yoga")}
-          onMouseEnter={() => {
-            setHoveredButton("yoga");
-            setShowDescription("yoga");
-          }}
-          onMouseLeave={() => {
-            setHoveredButton(null);
-            setShowDescription(null);
-          }}
-        >
-          <span style={{ fontSize: "24px" }}>{buttonConfigs.yoga.emoji}</span>
-          {buttonConfigs.yoga.label}
-        </button>
+        <div className="mindfulness-hero-content">
 
-        <button
-          style={getButtonStyle("meditation")}
-          onClick={() => handleButtonClick(buttonConfigs.meditation.path, "meditation")}
-          onMouseEnter={() => {
-            setHoveredButton("meditation");
-            setShowDescription("meditation");
-          }}
-          onMouseLeave={() => {
-            setHoveredButton(null);
-            setShowDescription(null);
-          }}
-        >
-          <span style={{ fontSize: "24px" }}>{buttonConfigs.meditation.emoji}</span>
-          {buttonConfigs.meditation.label}
-        </button>
+          <span className="mindfulness-small-title">
+            HERCARE WELLNESS
+          </span>
 
-        <button
-          style={getButtonStyle("exercise")}
-          onClick={() => handleButtonClick(buttonConfigs.exercise.path, "exercise")}
-          onMouseEnter={() => {
-            setHoveredButton("exercise");
-            setShowDescription("exercise");
-          }}
-          onMouseLeave={() => {
-            setHoveredButton(null);
-            setShowDescription(null);
-          }}
-        >
-          <span style={{ fontSize: "24px" }}>{buttonConfigs.exercise.emoji}</span>
-          {buttonConfigs.exercise.label}
-        </button>
+          <h1>
+            Mindfulness & 
+            <br />
+            <span>Wellness Journey</span>
+          </h1>
 
-      </div>
-
-      {/* Description display area */}
-      {showDescription && (
-        <div style={{
-          marginTop: "30px",
-          padding: "20px",
-          backgroundColor: "#f0f0f0",
-          borderRadius: "10px",
-          maxWidth: "500px",
-          marginLeft: "auto",
-          marginRight: "auto",
-          animation: "fadeIn 0.3s ease"
-        }}>
-          <p style={{ margin: 0, color: "#333", fontSize: "16px" }}>
-            {descriptions[showDescription]}
+          <p>
+            Choose an activity to begin your wellness journey
+            and find balance in your daily life.
           </p>
+
         </div>
-      )}
 
-      {/* Add CSS animations */}
-      <style>
-        {`
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(-10px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-          
-          /* Optional: Add a subtle shine effect on hover */
-          button:hover::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shine 0.5s ease;
-          }
-          
-          @keyframes shine {
-            to {
-              left: 100%;
-            }
-          }
-        `}
-      </style>
+        <div className="mindfulness-hero-image">
 
-      {/* Optional: Add a motivational quote */}
-      <div style={{
-        marginTop: "50px",
-        padding: "20px",
-        borderTop: "2px solid #ff6b9a",
-        maxWidth: "600px",
-        marginLeft: "auto",
-        marginRight: "auto"
-      }}>
-        <p style={{ 
-          fontStyle: "italic", 
-          color: "#666",
-          fontSize: "14px"
-        }}>
-          "Mindfulness is the aware, balanced acceptance of the present experience."
-        </p>
-      </div>
+          <img
+            src="/src/assets/images/Mindfulness.png"
+            alt="Woman meditating in a peaceful setting"
+          />
+
+        </div>
+
+      </section>
+
+      {/* =========================
+          ACTIVITY CARDS
+      ========================== */}
+
+      <section className="mindfulness-activities">
+
+        <div className="mindfulness-activities-header">
+
+          <span>CHOOSE YOUR ACTIVITY</span>
+
+          <h2>
+            Begin Your Wellness Journey
+          </h2>
+
+          <p>
+            Select a practice that resonates with you today
+          </p>
+
+        </div>
+
+        <div className="mindfulness-cards-grid">
+
+          {Object.entries(buttonConfigs).map(([key, config]) => (
+            <div
+              key={key}
+              className={`mindfulness-card 
+                ${hoveredButton === key ? 'hovered' : ''} 
+                ${clickEffect === key ? 'clicked' : ''}`}
+              onClick={() => handleButtonClick(config.path, key)}
+              onMouseEnter={() => {
+                setHoveredButton(key);
+                setShowDescription(key);
+              }}
+              onMouseLeave={() => {
+                setHoveredButton(null);
+                setShowDescription(null);
+              }}
+              style={{
+                borderColor: config.bgColor,
+                cursor: 'pointer'
+              }}
+            >
+              {/* Card Content */}
+              <div className="mindfulness-card-content">
+                <h3>{config.label}</h3>
+                <p>{config.description}</p>
+                
+                {/* Benefit Tag */}
+                <div className="mindfulness-card-benefit">
+                  <span>{config.benefit}</span>
+                </div>
+              </div>
+
+              {/* Card Footer - Start Button */}
+              <div className="mindfulness-card-footer">
+                <button 
+                  className="mindfulness-start-btn"
+                  style={{
+                    backgroundColor: config.bgColor
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleButtonClick(config.path, key);
+                  }}
+                >
+                  Start Exercise 
+                </button>
+              </div>
+            </div>
+          ))}
+
+        </div>
+
+        {/* Description Display on Hover */}
+        {showDescription && (
+          <div className="mindfulness-description">
+            <p>{descriptions[showDescription]}</p>
+          </div>
+        )}
+
+      </section>
+
+      {/* =========================
+          MOTIVATIONAL QUOTE
+      ========================== */}
+
+      <section className="mindfulness-quote">
+
+        <div className="mindfulness-quote-content">
+
+          <span className="mindfulness-quote-icon">"</span>
+
+          <p>
+            Mindfulness is the aware, balanced acceptance 
+            of the present experience.
+          </p>
+
+          <span className="mindfulness-quote-author">
+            — Mindfulness Practice
+          </span>
+
+        </div>
+
+      </section>
+
     </div>
   );
 }
