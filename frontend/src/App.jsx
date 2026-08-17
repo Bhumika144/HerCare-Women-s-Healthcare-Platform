@@ -16,6 +16,8 @@ import Resources from "./pages/Resources";
 import SupportBot from "./pages/SupportBot";
 import Education from "./pages/Education";
 import Settings from "./pages/Settings";
+import EmotionTracker from "./pages/EmotionTracker";
+
 
 import PeriodExercise from "./pages/PeriodExercise";
 import Yoga from "./pages/Yoga";
@@ -49,6 +51,8 @@ function App() {
 
         {/* Dashboard Home */}
         <Route index element={null} />
+
+        <Route path="emotion-tracker" element={<EmotionTracker />} />
 
         {/* Period Tracker */}
         <Route
