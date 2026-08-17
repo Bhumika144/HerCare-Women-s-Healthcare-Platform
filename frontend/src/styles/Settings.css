@@ -1,0 +1,464 @@
+/* =========================================
+   SETTINGS PAGE
+========================================= */
+
+.settings-page {
+  width: 100%;
+  min-height: 100%;
+  padding: 10px 0 40px;
+  box-sizing: border-box;
+  background: transparent;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.settings-header {
+  margin-bottom: 22px;
+}
+
+.settings-header h2 {
+  margin: 0;
+  font-size: 28px;
+  color: #333;
+  font-weight: 700;
+}
+
+.settings-header p {
+  margin-top: 7px;
+  color: #777;
+  font-size: 14px;
+}
+
+/* =========================================
+   SECTION
+========================================= */
+
+.settings-section {
+  margin-bottom: 28px;
+}
+
+.settings-section h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #444;
+}
+
+/* =========================================
+   SETTINGS CARD
+========================================= */
+
+.settings-card {
+  width: 100%;
+  min-height: 78px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 14px;
+
+  padding: 16px 18px;
+  margin-bottom: 10px;
+
+  transition:
+    background 0.3s ease,
+    border 0.3s ease,
+    box-shadow 0.2s ease;
+}
+
+.settings-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+/* =========================================
+   ICON
+========================================= */
+
+.setting-icon {
+  width: 44px;
+  height: 44px;
+
+  min-width: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #fff1f6;
+
+  font-size: 21px;
+}
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.setting-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.setting-content h4 {
+  margin: 0 0 5px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #333;
+}
+
+.setting-content p {
+  margin: 0;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  color: #888;
+}
+
+/* =========================================
+   ACTION BUTTON
+========================================= */
+
+.settings-action {
+  border: none;
+
+  background: #f7e1eb;
+  color: #b43d70;
+
+  padding: 9px 17px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  transition: 0.2s ease;
+}
+
+.settings-action:hover {
+  background: #efd0df;
+}
+
+/* =========================================
+   TOGGLE
+========================================= */
+
+.toggle {
+  width: 48px;
+  height: 26px;
+
+  min-width: 48px;
+
+  border: none;
+  border-radius: 30px;
+
+  background: #d6d6d6;
+
+  padding: 3px;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.toggle span {
+  display: block;
+
+  width: 20px;
+  height: 20px;
+
+  background: #ffffff;
+
+  border-radius: 50%;
+
+  transition: 0.25s ease;
+}
+
+.toggle.active {
+  background: #d86b9b;
+}
+
+.toggle.active span {
+  transform: translateX(22px);
+}
+
+/* =========================================
+   LANGUAGE
+========================================= */
+
+.language-select {
+  border: 1px solid #dddddd;
+
+  border-radius: 8px;
+
+  padding: 9px 12px;
+
+  background: #ffffff;
+
+  color: #444;
+
+  outline: none;
+
+  cursor: pointer;
+
+  font-size: 13px;
+}
+
+/* =========================================
+   DANGER
+========================================= */
+
+.danger-card {
+  border-color: #f2d5d5;
+}
+
+.danger-action {
+  border: none;
+
+  background: #ffe6e6;
+  color: #d33;
+
+  padding: 9px 17px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.danger-action:hover {
+  background: #ffd5d5;
+}
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+.logout-container {
+  margin-top: 35px;
+  padding-bottom: 30px;
+}
+
+.logout-button {
+  width: 100%;
+
+  border: none;
+
+  background: #fff0f0;
+  color: #d33;
+
+  padding: 14px;
+
+  border-radius: 12px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.logout-button:hover {
+  background: #ffe0e0;
+}
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+/*
+   IMPORTANT:
+   We are styling the Settings page itself instead of
+   relying only on body background.
+*/
+
+body.dark-mode {
+  background: #17151a !important;
+}
+
+/* Settings main area */
+
+body.dark-mode .settings-page {
+  background: #17151a !important;
+  color: #ffffff !important;
+}
+
+/* Header */
+
+body.dark-mode .settings-header h2 {
+  color: #ffffff !important;
+}
+
+body.dark-mode .settings-header p {
+  color: #bcb7c0 !important;
+}
+
+/* Section headings */
+
+body.dark-mode .settings-section h3 {
+  color: #ffffff !important;
+}
+
+/* Cards */
+
+body.dark-mode .settings-card {
+  background: #242126 !important;
+  border-color: #39343d !important;
+
+  box-shadow: none !important;
+}
+
+body.dark-mode .settings-card:hover {
+  background: #29252c !important;
+  border-color: #49434d !important;
+}
+
+/* Icons */
+
+body.dark-mode .setting-icon {
+  background: #382b34 !important;
+}
+
+/* Card titles */
+
+body.dark-mode .setting-content h4 {
+  color: #ffffff !important;
+}
+
+/* Card descriptions */
+
+body.dark-mode .setting-content p {
+  color: #bdb8c0 !important;
+}
+
+/* Buttons */
+
+body.dark-mode .settings-action {
+  background: #4c3041 !important;
+  color: #f3a4c5 !important;
+}
+
+body.dark-mode .settings-action:hover {
+  background: #5d394d !important;
+}
+
+/* Language */
+
+body.dark-mode .language-select {
+  background: #2b272e !important;
+  color: #ffffff !important;
+
+  border-color: #49434d !important;
+}
+
+body.dark-mode .language-select option {
+  background: #2b272e;
+  color: #ffffff;
+}
+
+/* Danger */
+
+body.dark-mode .danger-card {
+  border-color: #593b3b !important;
+}
+
+body.dark-mode .danger-action {
+  background: #432b2b !important;
+  color: #ff9b9b !important;
+}
+
+body.dark-mode .danger-action:hover {
+  background: #533333 !important;
+}
+
+/* Logout */
+
+body.dark-mode .logout-button {
+  background: #432b2b !important;
+  color: #ff9b9b !important;
+}
+
+body.dark-mode .logout-button:hover {
+  background: #533333 !important;
+}
+
+
+/* =====================================================
+   DARK MODE TOGGLE
+===================================================== */
+
+body.dark-mode .toggle {
+  background: #55505a;
+}
+
+body.dark-mode .toggle.active {
+  background: #d86b9b;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 650px) {
+
+  .settings-page {
+    padding: 10px 0 30px;
+  }
+
+  .settings-header h2 {
+    font-size: 24px;
+  }
+
+  .settings-card {
+    padding: 14px;
+    gap: 11px;
+  }
+
+  .setting-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    font-size: 18px;
+  }
+
+  .setting-content h4 {
+    font-size: 14px;
+  }
+
+  .setting-content p {
+    font-size: 12px;
+  }
+
+  .settings-action,
+  .danger-action {
+    padding: 8px 11px;
+    font-size: 12px;
+  }
+
+  .toggle {
+    width: 44px;
+    min-width: 44px;
+  }
+
+  .toggle.active span {
+    transform: translateX(18px);
+  }
+}
