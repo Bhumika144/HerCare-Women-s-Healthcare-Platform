@@ -2,10 +2,9 @@
 
 :root {
   --primary-rose: #D47E8E;
-  --primary-rose-dark: #b86a79;
   --primary-rose-light: #f3e8ea;
+  --primary-rose-dark: #b86a79;
   --primary-lavender: #E6E3F0;
-  --primary-cream: #F8F7F4;
   --text-dark: #1A1A1A;
   --text-gray: #6B7280;
   --text-light: #9CA3AF;
@@ -32,14 +31,20 @@ body {
   color: var(--text-dark);
 }
 
-/* App Layout */
+/* =====================================================
+   APP LAYOUT
+   ===================================================== */
+
 .app-layout {
   display: flex;
   min-height: 100vh;
   background: var(--bg-light);
 }
 
-/* Sidebar - Clean White Theme */
+/* =====================================================
+   SIDEBAR - Clean White Theme
+   ===================================================== */
+
 .sidebar {
   position: fixed;
   left: 0;
@@ -64,7 +69,7 @@ body {
   border-radius: 10px;
 }
 
-/* Brand Section */
+/* Brand */
 .brand {
   display: flex;
   flex-direction: column;
@@ -94,7 +99,7 @@ body {
   margin-top: 2px;
 }
 
-/* Navigation Menu - Clean White */
+/* Navigation */
 .nav-menu {
   flex: 1;
   padding: 20px 12px;
@@ -160,7 +165,10 @@ body {
   background: #FEE2E2;
 }
 
-/* Main Content */
+/* =====================================================
+   MAIN CONTENT
+   ===================================================== */
+
 .main-content {
   margin-left: var(--sidebar-width);
   flex: 1;
@@ -169,7 +177,10 @@ body {
   background: var(--bg-light);
 }
 
-/* Top Bar */
+/* =====================================================
+   TOP BAR
+   ===================================================== */
+
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -294,7 +305,10 @@ body {
   color: var(--primary-rose);
 }
 
-/* Notifications */
+/* =====================================================
+   NOTIFICATIONS
+   ===================================================== */
+
 .notifications-dropdown {
   position: absolute;
   top: 80px;
@@ -332,69 +346,305 @@ body {
   line-height: 1.4;
 }
 
-/* Stats Grid */
-.stats-grid {
+/* =====================================================
+   DASHBOARD HOME
+   ===================================================== */
+
+.dashboard-home {
+  margin-top: 8px;
+}
+
+/* Welcome Section */
+.dashboard-welcome {
+  margin-bottom: 28px;
+}
+
+.dashboard-welcome .welcome-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--primary-rose);
+  background: var(--primary-rose-light);
+  padding: 4px 14px;
+  border-radius: 50px;
+  margin-bottom: 10px;
+}
+
+.dashboard-welcome h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.dashboard-welcome h1 span {
+  color: var(--primary-rose);
+}
+
+.dashboard-welcome p {
+  color: var(--text-gray);
+  font-size: 1rem;
+}
+
+/* Stats Cards */
+.dashboard-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  margin: 20px 0;
+  margin-bottom: 24px;
 }
 
-.stat-card {
+.dashboard-stat-card {
   background: var(--bg-white);
-  padding: 20px 24px;
+  padding: 18px 22px;
   border-radius: var(--radius);
   border: 1px solid rgba(0, 0, 0, 0.04);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   transition: all 0.2s ease;
 }
 
-.stat-card:hover {
+.dashboard-stat-card:hover {
   box-shadow: var(--shadow-md);
 }
 
-.stat-icon {
+.dashboard-stat-icon {
   width: 44px;
   height: 44px;
   border-radius: 12px;
+  background: var(--primary-rose-light);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--primary-rose);
   font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
-.stat-icon.pink {
-  background: #FCE4EC;
-  color: #E91E63;
+.dashboard-stat-card div {
+  display: flex;
+  flex-direction: column;
 }
 
-.stat-icon.purple {
-  background: #F3E5F5;
-  color: #9C27B0;
+.dashboard-stat-card span {
+  font-size: 0.75rem;
+  color: var(--text-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.stat-icon.green {
-  background: #E8F5E9;
-  color: #4CAF50;
-}
-
-.stat-icon.orange {
-  background: #FFF3E0;
-  color: #FF9800;
-}
-
-.stat-info h3 {
-  font-size: 1.4rem;
+.dashboard-stat-card strong {
+  font-size: 1.2rem;
   font-weight: 700;
   color: var(--text-dark);
-  line-height: 1.2;
 }
 
-.stat-info p {
-  font-size: 0.8rem;
+/* Cycle Progress Card */
+.cycle-progress-card {
+  background: var(--bg-white);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.cycle-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.cycle-progress-header span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.cycle-progress-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-top: 2px;
+}
+
+.cycle-day-display {
+  font-size: 0.9rem;
   color: var(--text-gray);
+}
+
+.cycle-day-display strong {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary-rose);
+}
+
+/* Cycle Line */
+.cycle-line-wrapper {
+  margin-bottom: 20px;
+}
+
+.cycle-line {
+  width: 100%;
+  height: 8px;
+  background: var(--primary-rose-light);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.cycle-line-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-rose), var(--primary-rose-dark));
+  border-radius: 10px;
+}
+
+.cycle-markers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.cycle-markers > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.cycle-markers .marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+}
+
+.marker.menstrual {
+  background: #EF4444;
+}
+
+.marker.follicular {
+  background: #8B5CF6;
+}
+
+.marker.ovulation {
+  background: #EC4899;
+}
+
+.marker.luteal {
+  background: #F59E0B;
+}
+
+.cycle-markers small {
+  font-size: 0.65rem;
+  color: var(--text-gray);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Current Phase */
+.current-phase-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-light);
+  padding: 14px 20px;
+  border-radius: 12px;
+}
+
+.phase-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.current-phase-box span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.current-phase-box h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+/* Wellness Tips Section */
+.wellness-tips-section {
+  margin-bottom: 24px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-heading span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.section-heading h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-top: 2px;
+}
+
+.wellness-tips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.wellness-tip-card {
+  background: var(--bg-white);
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.wellness-tip-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.tip-icon {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.wellness-tip-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.wellness-tip-card p {
+  font-size: 0.85rem;
+  color: var(--text-gray);
+  line-height: 1.5;
+  margin: 0;
 }
 
 /* Quote Card */
@@ -405,8 +655,9 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .quote-icon {
@@ -416,168 +667,15 @@ body {
   margin-top: 2px;
 }
 
-.quote-text {
+.quote-card p {
   font-size: 0.95rem;
   color: var(--text-dark);
   font-style: italic;
   line-height: 1.5;
 }
 
-/* Cycle Status */
-.cycle-status-card {
-  background: var(--bg-white);
-  border-radius: var(--radius);
-  padding: 24px 28px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  margin-bottom: 24px;
-}
-
-.cycle-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.cycle-header h2 {
-  font-size: 1.1rem;
-  color: var(--text-dark);
-}
-
-.cycle-phase {
-  color: var(--primary-rose);
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.cycle-day-circle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 64px;
-  height: 64px;
-  background: var(--primary-rose-light);
-  border-radius: 50%;
-}
-
-.cycle-day-circle span {
-  font-size: 0.6rem;
-  color: var(--text-gray);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.cycle-day-circle h1 {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--primary-rose);
-}
-
-.cycle-progress-container {
-  margin-bottom: 16px;
-}
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  color: var(--text-gray);
-  margin-bottom: 6px;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 6px;
-  background: var(--primary-rose-light);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--primary-rose), var(--primary-rose-dark));
-  border-radius: 10px;
-}
-
-.cycle-details {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.detail-box {
-  background: var(--bg-light);
-  padding: 12px 16px;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.detail-box h4 {
-  font-size: 0.75rem;
-  color: var(--text-gray);
-  margin-bottom: 2px;
-}
-
-.detail-box p {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-dark);
-}
-
-/* No Data */
-.no-data-message {
-  text-align: center;
-  padding: 20px 0;
-}
-
-.no-data-image {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 16px;
-}
-
-.no-data-message h3 {
-  color: var(--text-dark);
-  margin-bottom: 6px;
-}
-
-.no-data-message p {
-  color: var(--text-gray);
-  margin-bottom: 16px;
-}
-
-.setup-btn {
-  padding: 10px 28px;
-  background: var(--primary-rose);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.setup-btn:hover {
-  background: var(--primary-rose-dark);
-  transform: translateY(-1px);
-}
-
-.loading-placeholder {
-  text-align: center;
-  color: var(--text-gray);
-  padding: 20px 0;
-}
-
 /* Quick Actions */
-.quick-actions {
-  margin-top: 8px;
-}
-
-.section-title {
+.quick-actions h2 {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-dark);
@@ -598,6 +696,7 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.04);
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .action-card:hover {
@@ -613,20 +712,29 @@ body {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-dark);
+  margin-bottom: 2px;
 }
 
 .action-card p {
   font-size: 0.8rem;
   color: var(--text-gray);
+  margin: 0;
 }
 
-/* Responsive */
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
 @media (max-width: 1024px) {
-  .stats-grid {
+  .dashboard-stats {
     grid-template-columns: repeat(2, 1fr);
   }
   
   .action-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wellness-tips-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -689,16 +797,25 @@ body {
     flex-wrap: wrap;
   }
 
-  .stats-grid {
+  .dashboard-stats {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
 
-  .stat-card {
-    padding: 16px;
+  .dashboard-stat-card {
+    padding: 14px 16px;
   }
 
-  .cycle-details {
+  .dashboard-stat-card strong {
+    font-size: 1rem;
+  }
+
+  .cycle-markers {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .wellness-tips-grid {
     grid-template-columns: 1fr;
   }
 
@@ -711,6 +828,14 @@ body {
     right: 16px;
     min-width: 280px;
   }
+
+  .dashboard-welcome h1 {
+    font-size: 1.5rem;
+  }
+
+  .cycle-progress-card {
+    padding: 18px 20px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -718,36 +843,66 @@ body {
     padding: 12px;
   }
 
-  .stats-grid {
+  .dashboard-stats {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
 
-  .stat-card {
-    padding: 12px 16px;
+  .dashboard-stat-card {
+    padding: 12px 14px;
   }
 
-  .stat-info h3 {
-    font-size: 1.1rem;
-  }
-
-  .stat-icon {
+  .dashboard-stat-icon {
     width: 36px;
     height: 36px;
     font-size: 0.9rem;
   }
 
-  .cycle-status-card {
-    padding: 16px 18px;
+  .dashboard-stat-card strong {
+    font-size: 0.95rem;
   }
 
-  .cycle-day-circle {
-    width: 52px;
-    height: 52px;
+  .dashboard-stat-card span {
+    font-size: 0.65rem;
   }
 
-  .cycle-day-circle h1 {
-    font-size: 1.2rem;
+  .cycle-progress-card {
+    padding: 14px 16px;
+  }
+
+  .cycle-progress-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cycle-progress-header h2 {
+    font-size: 1rem;
+  }
+
+  .cycle-day-display {
+    font-size: 0.8rem;
+  }
+
+  .cycle-day-display strong {
+    font-size: 1.1rem;
+  }
+
+  .cycle-markers .marker {
+    width: 28px;
+    height: 28px;
+    font-size: 0.65rem;
+  }
+
+  .current-phase-box {
+    padding: 12px 16px;
+  }
+
+  .phase-icon {
+    font-size: 1.5rem;
+  }
+
+  .current-phase-box h3 {
+    font-size: 0.95rem;
   }
 
   .action-grid {
@@ -762,11 +917,31 @@ body {
     font-size: 1.4rem;
   }
 
+  .action-card h4 {
+    font-size: 0.85rem;
+  }
+
+  .action-card p {
+    font-size: 0.75rem;
+  }
+
+  .wellness-tip-card {
+    padding: 16px 18px;
+  }
+
+  .wellness-tip-card h3 {
+    font-size: 0.9rem;
+  }
+
+  .wellness-tip-card p {
+    font-size: 0.8rem;
+  }
+
   .quote-card {
     padding: 14px 18px;
   }
 
-  .quote-text {
+  .quote-card p {
     font-size: 0.85rem;
   }
 
@@ -778,4 +953,51 @@ body {
   .date-time {
     font-size: 0.7rem;
   }
+
+  .dashboard-welcome h1 {
+    font-size: 1.3rem;
+  }
+
+  .dashboard-welcome p {
+    font-size: 0.9rem;
+  }
+
+  .notifications-dropdown {
+    right: 8px;
+    min-width: 240px;
+    padding: 16px;
+  }
+}
+
+/* =====================================================
+   LEAFLEFT OVERRIDES (for map)
+   ===================================================== */
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.leaflet-popup-content {
+  margin: 8px 12px !important;
+}
+
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.leaflet-control-zoom a {
+  background: var(--bg-white) !important;
+  color: var(--text-dark) !important;
+  border: 1px solid rgba(0, 0, 0, 0.04) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--primary-rose-light) !important;
+  color: var(--primary-rose) !important;
+}
+
+.leaflet-marker-icon {
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }

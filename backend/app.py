@@ -1095,39 +1095,144 @@ def get_period_dates(email):
 
 
 
+
 @app.route("/profile/<email>", methods=["GET"])
 def get_profile(email):
-    profile = mongo.db.user_profiles.find_one({"email": email})
+
+    profile = mongo.db.user_profiles.find_one(
+        {"email": email}
+    )
 
     if not profile:
-        return jsonify({"error": "Profile not found"}), 404
+        return jsonify({
+            "error": "Profile not found"
+        }), 404
 
     profile["_id"] = str(profile["_id"])
-    return jsonify(profile), 200
 
+    return jsonify(profile), 200
 
 
 @app.route("/profile/update", methods=["PUT"])
 def update_profile():
+
     data = request.get_json()
+
     email = data.get("email")
 
     if not email:
-        return jsonify({"error": "Email required"}), 400
+        return jsonify({
+            "error": "Email required"
+        }), 400
+
+
+    # ============================
+    # PERSONAL INFORMATION
+    # ============================
+
+    profile_data = {
+
+        "display_name":
+            data.get("display_name"),
+
+        "age":
+            data.get("age"),
+
+        "location":
+            data.get("location"),
+
+        "language":
+            data.get("language", "English"),
+
+        "gender":
+            data.get("gender", "female"),
+
+
+        # ============================
+        # MENSTRUAL HEALTH
+        # ============================
+
+        "last_period":
+            data.get("last_period"),
+
+        "average_cycle_length":
+            data.get("average_cycle_length", 28),
+
+        "period_duration":
+            data.get("period_duration"),
+
+        "period_regular":
+            data.get("period_regular"),
+
+        "symptoms":
+            data.get("symptoms", []),
+
+        "medical_issues":
+            data.get("medical_issues", []),
+
+        "pregnancy_status":
+            data.get(
+                "pregnancy_status",
+                "no"
+            ),
+
+
+        # ============================
+        # FITNESS
+        # ============================
+
+        "fitness_level":
+            data.get(
+                "fitness_level",
+                "beginner"
+            ),
+
+        "activities":
+            data.get("activities", []),
+
+
+        # ============================
+        # GOALS
+        # ============================
+
+        "goals":
+            data.get("goals", []),
+
+
+        # ============================
+        # UPDATED TIME
+        # ============================
+
+        "updated_at":
+            datetime.datetime.utcnow()
+    }
+
+
+    # ============================
+    # SAVE TO MONGODB
+    # ============================
 
     mongo.db.user_profiles.update_one(
+
         {"email": email},
+
         {
-            "$set": {
-                "age": data.get("age"),
-                "period_regular": data.get("periodRegular"),
-                "average_cycle_length": data.get("cycleLength"),
-                "medical_issues": data.get("medicalIssues"),
-            }
-        }
+            "$set": profile_data
+        },
+
+        upsert=True
     )
 
-    return jsonify({"message": "Profile updated"}), 200
+
+    return jsonify({
+
+        "message":
+            "Profile updated successfully",
+
+        "profile":
+            profile_data
+
+    }), 200
 
 
 
@@ -1468,6 +1573,457 @@ def save_article():
     return jsonify({
         "saved": new_status
     }), 200
+
+
+
+
+
+from flask import send_file
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer,
+    Table,
+    TableStyle
+)
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.enums import TA_CENTER
+from io import BytesIO
+import datetime
+
+
+@app.route("/download-report/<email>", methods=["GET"])
+def download_report(email):
+
+    # =========================
+    # GET USER PROFILE
+    # =========================
+
+    profile = mongo.db.user_profiles.find_one(
+        {"email": email}
+    )
+
+    if not profile:
+        return jsonify({
+            "error": "Profile not found"
+        }), 404
+
+
+    # =========================
+    # GET USER ACCOUNT
+    # =========================
+
+    user = mongo.db.users.find_one(
+        {"email": email}
+    )
+
+
+    # =========================
+    # GET PERIOD HISTORY
+    # =========================
+
+    period_logs = list(
+        mongo.db.period_logs.find(
+            {"email": email}
+        ).sort("date", 1)
+    )
+
+
+    # =========================
+    # GET MOOD / WELLNESS LOGS
+    # =========================
+
+    mood_logs = list(
+        mongo.db.mood_logs.find(
+            {"email": email}
+        ).sort("created_at", -1)
+    )
+
+
+    # =========================
+    # CREATE PDF
+    # =========================
+
+    buffer = BytesIO()
+
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=40,
+        leftMargin=40,
+        topMargin=40,
+        bottomMargin=40
+    )
+
+    styles = getSampleStyleSheet()
+
+    title_style = ParagraphStyle(
+        "TitleStyle",
+        parent=styles["Title"],
+        alignment=TA_CENTER,
+        fontSize=22,
+        spaceAfter=20
+    )
+
+    heading_style = ParagraphStyle(
+        "HeadingStyle",
+        parent=styles["Heading2"],
+        fontSize=15,
+        spaceBefore=15,
+        spaceAfter=10
+    )
+
+    normal_style = styles["BodyText"]
+
+    story = []
+
+
+    # =========================
+    # TITLE
+    # =========================
+
+    story.append(
+        Paragraph(
+            "🌸 HerCare Wellness Report",
+            title_style
+        )
+    )
+
+    story.append(
+        Paragraph(
+            "Personal Health & Wellness Summary",
+            styles["Normal"]
+        )
+    )
+
+    story.append(Spacer(1, 20))
+
+
+    # =========================
+    # PERSONAL INFORMATION
+    # =========================
+
+    story.append(
+        Paragraph(
+            "👤 Personal Information",
+            heading_style
+        )
+    )
+
+    personal_data = [
+        ["Name", profile.get("display_name", "Not provided")],
+        ["Email", email],
+        ["Age", str(profile.get("age", "Not provided"))],
+        ["Location", profile.get("location", "Not provided")],
+        ["Language", profile.get("language", "Not provided")],
+    ]
+
+    personal_table = Table(
+        personal_data,
+        colWidths=[150, 300]
+    )
+
+    personal_table.setStyle(
+        TableStyle([
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ("BACKGROUND", (0, 0), (0, -1), colors.whitesmoke),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("PADDING", (0, 0), (-1, -1), 7),
+        ])
+    )
+
+    story.append(personal_table)
+
+
+    # =========================
+    # MENSTRUAL HEALTH
+    # =========================
+
+    story.append(
+        Paragraph(
+            "🩸 Menstrual Health",
+            heading_style
+        )
+    )
+
+    menstrual_data = [
+        [
+            "Average Cycle",
+            f"{profile.get('average_cycle_length', 28)} days"
+        ],
+        [
+            "Period Regularity",
+            str(profile.get("period_regular", "Not provided"))
+        ],
+        [
+            "Period Duration",
+            f"{profile.get('period_duration', 'Not provided')} days"
+        ],
+        [
+            "Last Period",
+            str(profile.get("last_period", "Not provided"))
+        ],
+        [
+            "Next Predicted Period",
+            str(profile.get(
+                "predicted_period_start",
+                "Not available"
+            ))
+        ],
+    ]
+
+    menstrual_table = Table(
+        menstrual_data,
+        colWidths=[180, 270]
+    )
+
+    menstrual_table.setStyle(
+        TableStyle([
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ("BACKGROUND", (0, 0), (0, -1), colors.whitesmoke),
+            ("PADDING", (0, 0), (-1, -1), 7),
+        ])
+    )
+
+    story.append(menstrual_table)
+
+
+    # =========================
+    # MEDICAL ISSUES
+    # =========================
+
+    story.append(
+        Paragraph(
+            "🩺 Medical Information",
+            heading_style
+        )
+    )
+
+    medical = profile.get(
+        "medical_issues",
+        []
+    )
+
+    if isinstance(medical, list):
+        medical_text = ", ".join(
+            str(x) for x in medical
+        ) if medical else "None reported"
+    else:
+        medical_text = str(medical)
+
+    story.append(
+        Paragraph(
+            f"<b>Medical Issues:</b> {medical_text}",
+            normal_style
+        )
+    )
+
+
+    # =========================
+    # PERIOD HISTORY
+    # =========================
+
+    story.append(
+        Paragraph(
+            "📅 Period History",
+            heading_style
+        )
+    )
+
+    period_dates = profile.get(
+        "period_dates",
+        []
+    )
+
+    if period_dates:
+
+        period_data = [
+            ["#", "Period Start Date"]
+        ]
+
+        for index, date in enumerate(
+            sorted(period_dates),
+            start=1
+        ):
+            period_data.append([
+                str(index),
+                str(date)
+            ])
+
+        period_table = Table(
+            period_data,
+            colWidths=[80, 370]
+        )
+
+        period_table.setStyle(
+            TableStyle([
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+                ("BACKGROUND", (0, 0), (-1, 0), colors.whitesmoke),
+                ("PADDING", (0, 0), (-1, -1), 7),
+            ])
+        )
+
+        story.append(period_table)
+
+    else:
+
+        story.append(
+            Paragraph(
+                "No period history recorded.",
+                normal_style
+            )
+        )
+
+
+    # =========================
+    # PERIOD LOG DETAILS
+    # =========================
+
+    story.append(
+        Paragraph(
+            "📝 Logged Period Details",
+            heading_style
+        )
+    )
+
+    if period_logs:
+
+        log_data = [
+            ["Date", "Symptoms"]
+        ]
+
+        for log in period_logs:
+
+            log_data.append([
+                str(log.get("date", "")),
+                str(log.get("symptom", ""))
+            ])
+
+        log_table = Table(
+            log_data,
+            colWidths=[150, 300]
+        )
+
+        log_table.setStyle(
+            TableStyle([
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+                ("BACKGROUND", (0, 0), (-1, 0), colors.whitesmoke),
+                ("PADDING", (0, 0), (-1, -1), 7),
+            ])
+        )
+
+        story.append(log_table)
+
+    else:
+
+        story.append(
+            Paragraph(
+                "No detailed period logs available.",
+                normal_style
+            )
+        )
+
+
+    # =========================
+    # FITNESS
+    # =========================
+
+    story.append(
+        Paragraph(
+            "🏃 Fitness & Lifestyle",
+            heading_style
+        )
+    )
+
+    fitness_data = [
+        [
+            "Fitness Level",
+            str(profile.get(
+                "fitnessLevel",
+                "Not provided"
+            ))
+        ],
+        [
+            "Activities",
+            ", ".join(
+                profile.get(
+                    "activities",
+                    []
+                )
+            ) if isinstance(
+                profile.get("activities", []),
+                list
+            ) else str(
+                profile.get("activities", "")
+            )
+        ],
+    ]
+
+    fitness_table = Table(
+        fitness_data,
+        colWidths=[180, 270]
+    )
+
+    fitness_table.setStyle(
+        TableStyle([
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ("BACKGROUND", (0, 0), (0, -1), colors.whitesmoke),
+            ("PADDING", (0, 0), (-1, -1), 7),
+        ])
+    )
+
+    story.append(fitness_table)
+
+
+    # =========================
+    # FOOTER
+    # =========================
+
+    story.append(Spacer(1, 25))
+
+    story.append(
+        Paragraph(
+            "This report summarizes information recorded in your HerCare account.",
+            normal_style
+        )
+    )
+
+    story.append(
+        Paragraph(
+            "HerCare is a wellness tracking platform and this report is not a medical diagnosis.",
+            normal_style
+        )
+    )
+
+
+    # =========================
+    # BUILD PDF
+    # =========================
+
+    doc.build(story)
+
+    buffer.seek(0)
+
+
+    # =========================
+    # DOWNLOAD
+    # =========================
+
+    filename = (
+        f"HerCare_Wellness_Report_"
+        f"{datetime.datetime.now().strftime('%Y%m%d')}.pdf"
+    )
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name=filename,
+        mimetype="application/pdf"
+    )
+
+
 
 
 if __name__ == "__main__":

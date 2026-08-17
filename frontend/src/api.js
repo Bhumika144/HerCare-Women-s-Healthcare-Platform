@@ -109,6 +109,12 @@ export const seedWellnessPrograms = () =>
   api.post("/wellness/seed");
 
 
+export const downloadReport = (email) =>
+  api.get(`/download-report/${email}`, {
+    responseType: "blob"
+  });
+
+
 /* ===========================
    EXPORT DEFAULT
 =========================== */

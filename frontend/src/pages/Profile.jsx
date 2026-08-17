@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import api from "../api";
 import "../styles/profile.css";
 
 export default function Profile() {
@@ -7,56 +8,210 @@ export default function Profile() {
   const [profile, setProfile] = useState(null);
   const [edit, setEdit] = useState(false);
   const [image, setImage] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+
+  // ============================
+  // FETCH PROFILE
+  // ============================
 
   useEffect(() => {
-    fetch(`http://localhost:5000/profile/${user.email}`)
-      .then(res => res.json())
-      .then(data => setProfile(data));
+    if (user?.email) {
+      fetchProfile();
+    }
   }, []);
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(URL.createObjectURL(file));
+  const fetchProfile = async () => {
+    try {
+      const res = await api.get(`/profile/${user.email}`);
+
+      setProfile(res.data);
+
+    } catch (error) {
+      console.error("❌ Profile fetch error:", error);
     }
   };
 
-  const toggleArray = (field, value) => {
-    setProfile(prev => ({
+
+  // ============================
+  // IMAGE
+  // ============================
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      setImage(URL.createObjectURL(file));
+
+      // For now we only preview it.
+      // Later we can upload the actual image to backend.
+    }
+  };
+
+
+  // ============================
+  // NORMAL FIELD UPDATE
+  // ============================
+
+  const updateField = (field, value) => {
+    setProfile((prev) => ({
       ...prev,
-      [field]: prev[field]?.includes(value)
-        ? prev[field].filter(v => v !== value)
-        : [...(prev[field] || []), value]
+      [field]: value,
     }));
   };
 
-  const save = async () => {
-    await fetch("http://localhost:5000/profile/update", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: user.email, ...profile })
-    });
 
-    setEdit(false);
+  // ============================
+  // ARRAY FIELD UPDATE
+  // ============================
+
+  const toggleArray = (field, value) => {
+    setProfile((prev) => {
+
+      const current = prev[field] || [];
+
+      return {
+        ...prev,
+        [field]: current.includes(value)
+          ? current.filter((item) => item !== value)
+          : [...current, value],
+      };
+
+    });
   };
 
-  if (!profile) return <p className="loading">Loading...</p>;
 
-  const Chip = ({ label, field }) => (
-    <span
-      className={`chip ${profile[field]?.includes(label) ? "active" : ""}`}
-      onClick={() => edit && toggleArray(field, label)}
-    >
-      {label}
-    </span>
-  );
+  // ============================
+  // SAVE PROFILE
+  // ============================
+
+  const save = async () => {
+
+    try {
+
+      setSaving(true);
+      setMessage("");
+
+      const res = await api.put(
+        "/profile/update",
+        {
+          email: user.email,
+
+          // Personal
+          display_name: profile.display_name,
+          age: profile.age,
+          location: profile.location,
+          language: profile.language,
+          gender: profile.gender,
+
+          // Menstrual
+          last_period: profile.last_period,
+          average_cycle_length:
+            profile.average_cycle_length,
+          period_duration:
+            profile.period_duration,
+          period_regular:
+            profile.period_regular,
+
+          symptoms:
+            profile.symptoms || [],
+
+          pregnancy_status:
+            profile.pregnancy_status,
+
+          medical_issues:
+            profile.medical_issues || [],
+
+          // Lifestyle
+          fitness_level:
+            profile.fitness_level,
+
+          activities:
+            profile.activities || [],
+
+          // Goals
+          goals:
+            profile.goals || [],
+        }
+      );
+
+      console.log("✅ PROFILE UPDATED:", res.data);
+
+      setMessage("Profile updated successfully 🌸");
+
+      setEdit(false);
+
+      // Refresh profile from DB
+      await fetchProfile();
+
+    } catch (error) {
+
+      console.error(
+        "❌ Profile update error:",
+        error
+      );
+
+      setMessage(
+        "Unable to update profile. Please try again."
+      );
+
+    } finally {
+
+      setSaving(false);
+
+    }
+  };
+
+
+  if (!profile) {
+    return (
+      <div className="profile-loading">
+        Loading your profile... 🌸
+      </div>
+    );
+  }
+
+
+  // ============================
+  // CHIP COMPONENT
+  // ============================
+
+  const Chip = ({ label, field }) => {
+
+    const selected =
+      profile[field]?.includes(label);
+
+    return (
+      <button
+        type="button"
+        className={`chip ${
+          selected ? "active" : ""
+        }`}
+        onClick={() =>
+          edit &&
+          toggleArray(field, label)
+        }
+      >
+        {label}
+      </button>
+    );
+
+  };
+
 
   return (
+
     <div className="profile-wrapper">
 
-      {/* HEADER */}
+
+      {/* ==================================
+          HEADER
+      ================================== */}
+
       <div className="profile-header">
+
         <div className="image-box">
+
           <img
             src={
               image ||
@@ -64,181 +219,503 @@ export default function Profile() {
             }
             alt="profile"
           />
-          {edit && <input type="file" onChange={handleImageUpload} />}
+
+          {edit && (
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
+          )}
+
         </div>
 
-        <h2>{user.name}'s Health Profile</h2>
-        <p>{user.email}</p>
+
+        <div>
+
+          <h2>
+            {profile.display_name ||
+              user?.name ||
+              "User"}
+            's Health Profile
+          </h2>
+
+          <p>
+            {user.email}
+          </p>
+
+        </div>
+
       </div>
 
-      {/* PERSONAL INFO */}
+
+      {/* ==================================
+          MESSAGE
+      ================================== */}
+
+      {message && (
+        <div className="profile-message">
+          {message}
+        </div>
+      )}
+
+
+      {/* ==================================
+          PERSONAL INFORMATION
+      ================================== */}
+
       <div className="card">
-        <h3>Personal Info</h3>
+
+        <h3>
+          👤 Personal Information
+        </h3>
+
+
+        <label>
+          Display Name
+        </label>
 
         <input
+          disabled={!edit}
+          value={
+            profile.display_name || ""
+          }
+          placeholder="Your name"
+          onChange={(e) =>
+            updateField(
+              "display_name",
+              e.target.value
+            )
+          }
+        />
+
+
+        <label>
+          Age
+        </label>
+
+        <input
+          type="number"
           disabled={!edit}
           value={profile.age || ""}
           placeholder="Age"
           onChange={(e) =>
-            setProfile({ ...profile, age: e.target.value })
+            updateField(
+              "age",
+              e.target.value
+            )
           }
         />
+
+
+        <label>
+          Location
+        </label>
 
         <input
           disabled={!edit}
-          value={profile.location || ""}
-          placeholder="Location"
+          value={
+            profile.location || ""
+          }
+          placeholder="City / Location"
           onChange={(e) =>
-            setProfile({ ...profile, location: e.target.value })
+            updateField(
+              "location",
+              e.target.value
+            )
           }
         />
 
-        <select
-          disabled={!edit}
-          value={profile.language || "English"}
-          onChange={(e) =>
-            setProfile({ ...profile, language: e.target.value })
-          }
-        >
-          <option>English</option>
-          <option>Hindi</option>
-        </select>
+
+        <label>
+          Preferred Language
+        </label>
 
         <select
           disabled={!edit}
-          value={profile.gender || "female"}
+          value={
+            profile.language ||
+            "English"
+          }
           onChange={(e) =>
-            setProfile({ ...profile, gender: e.target.value })
+            updateField(
+              "language",
+              e.target.value
+            )
           }
         >
-          <option value="female">Female</option>
+          <option>
+            English
+          </option>
+
+          <option>
+            Hindi
+          </option>
+
+          <option>
+            Marathi
+          </option>
+
         </select>
+
+
+        <label>
+          Gender
+        </label>
+
+        <select
+          disabled={!edit}
+          value={
+            profile.gender ||
+            "female"
+          }
+          onChange={(e) =>
+            updateField(
+              "gender",
+              e.target.value
+            )
+          }
+        >
+          <option value="female">
+            Female
+          </option>
+
+        </select>
+
       </div>
 
-      {/* MENSTRUAL HEALTH */}
+
+      {/* ==================================
+          MENSTRUAL HEALTH
+      ================================== */}
+
       <div className="card">
-        <h3>Menstrual Health</h3>
+
+        <h3>
+          🌸 Menstrual Health
+        </h3>
+
+
+        <label>
+          Last Period Date
+        </label>
 
         <input
           type="date"
           disabled={!edit}
-          value={profile.last_period || ""}
+          value={
+            profile.last_period || ""
+          }
           onChange={(e) =>
-            setProfile({ ...profile, last_period: e.target.value })
+            updateField(
+              "last_period",
+              e.target.value
+            )
           }
         />
 
+
+        <label>
+          Average Cycle Length
+        </label>
+
         <input
+          type="number"
           disabled={!edit}
-          value={profile.average_cycle_length || ""}
-          placeholder="Cycle Length (e.g. 28 days)"
+          value={
+            profile.average_cycle_length ||
+            ""
+          }
+          placeholder="Example: 28"
           onChange={(e) =>
-            setProfile({
-              ...profile,
-              average_cycle_length: e.target.value
-            })
+            updateField(
+              "average_cycle_length",
+              e.target.value
+            )
           }
         />
 
+
+        <label>
+          Period Duration
+        </label>
+
         <input
+          type="number"
           disabled={!edit}
-          value={profile.period_duration || ""}
-          placeholder="Period Duration (e.g. 5 days)"
+          value={
+            profile.period_duration ||
+            ""
+          }
+          placeholder="Example: 5 days"
           onChange={(e) =>
-            setProfile({
-              ...profile,
-              period_duration: e.target.value
-            })
+            updateField(
+              "period_duration",
+              e.target.value
+            )
           }
         />
+
+
+        <label>
+          Cycle Regularity
+        </label>
 
         <select
           disabled={!edit}
-          value={profile.period_regular || "regular"}
+          value={
+            profile.period_regular ||
+            "regular"
+          }
           onChange={(e) =>
-            setProfile({
-              ...profile,
-              period_regular: e.target.value
-            })
+            updateField(
+              "period_regular",
+              e.target.value
+            )
           }
         >
-          <option value="regular">Regular</option>
-          <option value="irregular">Irregular</option>
+          <option value="regular">
+            Regular
+          </option>
+
+          <option value="irregular">
+            Irregular
+          </option>
+
         </select>
 
-        {/* Symptoms */}
+
+        {/* SYMPTOMS */}
+
+        <label>
+          Common Symptoms
+        </label>
+
         <div className="chip-group">
+
           {[
             "cramps",
             "mood swings",
             "bloating",
             "fatigue",
             "headache",
-            "back pain"
-          ].map(s => (
-            <Chip key={s} label={s} field="symptoms" />
+            "back pain",
+          ].map((symptom) => (
+
+            <Chip
+              key={symptom}
+              label={symptom}
+              field="symptoms"
+            />
+
           ))}
+
         </div>
 
-        {/* Pregnancy */}
-        <select
-          disabled={!edit}
-          value={profile.pregnancyStatus || "no"}
-          onChange={(e) =>
-            setProfile({
-              ...profile,
-              pregnancyStatus: e.target.value
-            })
-          }
-        >
-          <option value="no">Not Pregnant</option>
-          <option value="trying">Trying to Conceive</option>
-          <option value="pregnant">Pregnant</option>
-        </select>
-      </div>
 
-      {/* FITNESS */}
-      <div className="card">
-        <h3>Fitness & Lifestyle</h3>
+        {/* MEDICAL ISSUES */}
 
-        <select
-          disabled={!edit}
-          value={profile.fitnessLevel || "beginner"}
-          onChange={(e) =>
-            setProfile({
-              ...profile,
-              fitnessLevel: e.target.value
-            })
-          }
-        >
-          <option>beginner</option>
-          <option>intermediate</option>
-          <option>advanced</option>
-        </select>
+        <label>
+          Medical Conditions / Issues
+        </label>
 
         <div className="chip-group">
+
+          {[
+            "PCOS",
+            "PCOD",
+            "Endometriosis",
+            "Thyroid",
+            "Anemia",
+            "None",
+          ].map((issue) => (
+
+            <Chip
+              key={issue}
+              label={issue}
+              field="medical_issues"
+            />
+
+          ))}
+
+        </div>
+
+
+        {/* PREGNANCY */}
+
+        <label>
+          Pregnancy Status
+        </label>
+
+        <select
+          disabled={!edit}
+          value={
+            profile.pregnancy_status ||
+            "no"
+          }
+          onChange={(e) =>
+            updateField(
+              "pregnancy_status",
+              e.target.value
+            )
+          }
+        >
+
+          <option value="no">
+            Not Pregnant
+          </option>
+
+          <option value="trying">
+            Trying to Conceive
+          </option>
+
+          <option value="pregnant">
+            Pregnant
+          </option>
+
+        </select>
+
+      </div>
+
+
+      {/* ==================================
+          FITNESS & LIFESTYLE
+      ================================== */}
+
+      <div className="card">
+
+        <h3>
+          🧘‍♀️ Fitness & Lifestyle
+        </h3>
+
+
+        <label>
+          Fitness Level
+        </label>
+
+        <select
+          disabled={!edit}
+          value={
+            profile.fitness_level ||
+            "beginner"
+          }
+          onChange={(e) =>
+            updateField(
+              "fitness_level",
+              e.target.value
+            )
+          }
+        >
+
+          <option value="beginner">
+            Beginner
+          </option>
+
+          <option value="intermediate">
+            Intermediate
+          </option>
+
+          <option value="advanced">
+            Advanced
+          </option>
+
+        </select>
+
+
+        <label>
+          Activities
+        </label>
+
+        <div className="chip-group">
+
           {[
             "yoga",
             "pilates",
             "gym",
             "walking",
-            "home workout"
-          ].map(a => (
-            <Chip key={a} label={a} field="activities" />
+            "home workout",
+          ].map((activity) => (
+
+            <Chip
+              key={activity}
+              label={activity}
+              field="activities"
+            />
+
           ))}
+
         </div>
+
       </div>
 
-      {/* BUTTON */}
-      {edit ? (
-        <button className="save-btn" onClick={save}>
-          Save Changes
-        </button>
-      ) : (
-        <button className="edit-btn" onClick={() => setEdit(true)}>
-          Edit Profile
-        </button>
-      )}
+
+      {/* ==================================
+          GOALS
+      ================================== */}
+
+      <div className="card">
+
+        <h3>
+          🎯 Goals & Personalization
+        </h3>
+
+        <div className="chip-group">
+
+          {[
+            "Track Period",
+            "Improve Fitness",
+            "Manage Stress",
+            "Improve Sleep",
+            "Healthy Diet",
+            "Understand My Cycle",
+          ].map((goal) => (
+
+            <Chip
+              key={goal}
+              label={goal}
+              field="goals"
+            />
+
+          ))}
+
+        </div>
+
+      </div>
+
+
+      {/* ==================================
+          BUTTON
+      ================================== */}
+
+      <div className="profile-actions">
+
+        {edit ? (
+
+          <button
+            className="save-btn"
+            onClick={save}
+            disabled={saving}
+          >
+            {saving
+              ? "Saving..."
+              : "Save Changes 🌸"}
+          </button>
+
+        ) : (
+
+          <button
+            className="edit-btn"
+            onClick={() =>
+              setEdit(true)
+            }
+          >
+            ✏️ Edit Profile
+          </button>
+
+        )}
+
+      </div>
+
     </div>
   );
 }
